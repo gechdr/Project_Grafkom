@@ -82,7 +82,7 @@ loader.load(
 	}
 );
 
-let mixer;
+let mixerHeli;
 let heli;
 loader.load(
 	// resource URL
@@ -95,11 +95,11 @@ loader.load(
 		heli.scale.y = 5;
 		heli.scale.z = 5;
 
-		mixer = new THREE.AnimationMixer(heli);
+		mixerHeli = new THREE.AnimationMixer(heli);
 		const clips = gltf.animations;
 		console.log(clips);
 		const clip = THREE.AnimationClip.findByName(clips, "Animation");
-		const action = mixer.clipAction(clip);
+		const action = mixerHeli.clipAction(clip);
 		action.play();
 
 		// console.log(heli);
@@ -107,7 +107,76 @@ loader.load(
 	}
 );
 
+let mixerRocket;
+let rocket;
+loader.load(
+	// resource URL
+	"models/rocket_ship.glb",
+	function (gltf) {
+		rocket = gltf.scene;
+		rocket.castShadow = true;
+		rocket.position.x = 0;
+		rocket.position.z = 40;
+		rocket.scale.x = 0.1;
+		rocket.scale.y = 0.1;
+		rocket.scale.z = 0.1;
 
+		mixerRocket = new THREE.AnimationMixer(rocket);
+		const clips = gltf.animations;
+		console.log(clips);
+		const clip = THREE.AnimationClip.findByName(clips, "Take 001");
+		const action = mixerRocket.clipAction(clip);
+		action.play();
+		// console.log(rocket);
+		scene.add(rocket);
+	}
+);
+
+let mixerDrone;
+let drone;
+loader.load(
+	// resource URL
+	"models/s9_mini_drone.glb",
+	function (gltf) {
+		drone = gltf.scene;
+		drone.castShadow = true;
+		drone.position.x = 0;
+		drone.position.z = 40;
+		drone.scale.x = 0.1;
+		drone.scale.y = 0.1;
+		drone.scale.z = 0.1;
+		console.log(drone);
+		
+		// mixerDrone = new THREE.AnimationMixer(drone);
+		// const clips = gltf.animations;
+		// console.log(clips);
+		// const clip = THREE.AnimationClip.findByName(clips, "Sphere");
+		// const action = mixerDrone.clipAction(clip);
+		// action.play();
+
+		console.log(drone);
+		scene.add(drone);
+	}
+);
+
+let hot_air;
+loader.load(
+	// resource URL
+	"models/steampunk_hot_air_balloon.glb",
+	function (gltf) {
+		hot_air = gltf.scene;
+		hot_air.castShadow = true;
+		hot_air.position.x = 10;
+		// hot_air.position.y = -40;
+		// hot_air.position.z = 40;
+		hot_air.scale.x = 1;
+		hot_air.scale.y = 1;
+		hot_air.scale.z = 1;
+		
+		// console.log(hot_air);
+		scene.add(hot_air);
+	}
+);
 
 // renderer
 const renderer = new THREE.WebGL1Renderer({ antialias: true, powerPreference: "high-performance", logarithmicDepthBuffer: true });
@@ -153,8 +222,11 @@ controls.listenToKeyEvents(window);
 let turnPlane = 1;
 let turnHeli = 1;
 let turnBallon = 1;
+let turnHotAir = 1;
 
-const clock = new THREE.Clock();
+const clockHeli = new THREE.Clock();
+const clockRocket = new THREE.Clock();
+const clockDrone = new THREE.Clock();
 function animate() {
 	if (plane != undefined) {
 		// plane.position.x += 0.09;
@@ -183,15 +255,15 @@ function animate() {
 		// heli.position.y += 0.09;
 
 		if (turnHeli == 1) {
-			heli.position.y += 0.02;
+			heli.position.y += 0.08;
 		} else {
-			heli.position.y -= 0.02;
+			heli.position.y -= 0.08;
 		}
 
-		if (heli.position.y > 20) {
+		if (heli.position.y > 50) {
 			turnHeli = 0;
 			// heli.rotation.y = 600;
-		} else if (heli.position.y < -20) {
+		} else if (heli.position.y < -50) {
 			turnHeli = 1;
 			// heli.rotation.y = 0;
 		}
@@ -213,19 +285,67 @@ function animate() {
 			ballon.position.x += 1;
 		}
 
-		if (ballon.position.y > 50) {
+		if (ballon.position.y > 60) {
 			turnBallon = 1;
-			// ballon.rotation.y = 600;
+			// ballon.rotation.x = 600;
+			// ballon.rotation.y = 0;
+			// ballon.rotation.z = 0;
 		} else if (ballon.position.y < -100) {
 			turnBallon = 0;
+			// ballon.rotation.x = 100;
+			// ballon.rotation.y = 200;
+			// ballon.rotation.z = 100;
+		}
+
+		// camera.lookAt(shark.position)
+	}
+
+	if (rocket != undefined) {
+		if (rocket.position.y < 100) {
+			rocket.position.y += 0.5;
+			rocket.position.x -= 1;
+			// rocket.rotation.y += 0.01;
+			// rocket.rotation.z += 0.1;
+			// rocket.rotation.x += 0.1;
+		} else {
+			rocket.position.y = -50;
+			rocket.position.x = 100;
+			
 			// ballon/.rotation.y = 0;
 		}
 
 		// camera.lookAt(shark.position)
 	}
 
-	if (mixer) {
-		mixer.update(clock.getDelta());
+	if (hot_air != undefined) {
+		// heli.position.x += 0.09;
+		// heli.position.y += 0.09;
+
+		if (turnHotAir == 1) {
+			hot_air.position.y += 0.02;
+		} else {
+			hot_air.position.y -= 0.02;
+		}
+
+		if (hot_air.position.y > 20) {
+			turnHotAir = 0;
+			// heli.rotation.y = 600;
+		} else if (hot_air.position.y < -20) {
+			turnHotAir = 1;
+			// heli.rotation.y = 0;
+		}
+
+		// camera.lookAt(shark.position)
+	}
+
+	if (mixerHeli) {
+		mixerHeli.update(clockHeli.getDelta());
+	}
+	if (mixerRocket) {
+		mixerRocket.update(clockRocket.getDelta());
+	}
+	if (mixerDrone) {
+		mixerDrone.update(clockDrone.getDelta());
 	}
 
 	
