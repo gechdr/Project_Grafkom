@@ -208,6 +208,8 @@ loader.load(
 	}
 );
 
+// .
+
 // renderer
 const renderer = new THREE.WebGL1Renderer({ antialias: true, powerPreference: "high-performance", logarithmicDepthBuffer: true });
 renderer.setSize(width, height);
