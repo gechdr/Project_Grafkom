@@ -80,9 +80,47 @@ loader.load(
 		land.scale.x = 0.1;
 		land.scale.y = 0.1;
 		land.scale.z = 0.1;
-		console.log(land);
+		// console.log(land);
 
 		scene.add(land);
+	}
+);
+
+let airport_building;
+loader.load(
+	// resource URL
+	"models/airport_building1.glb",
+	function (gltf) {
+		airport_building = gltf.scene;
+		airport_building.castShadow = true;
+		airport_building.position.x = 110;
+		airport_building.position.y = 0;
+		airport_building.position.z = -138;
+		airport_building.scale.x = 1000;
+		airport_building.scale.y = 1000;
+		airport_building.scale.z = 1000;
+
+		// console.log(plane);
+		scene.add(airport_building);
+	}
+);
+
+let helipad;
+loader.load(
+	// resource URL
+	"models/helipad.glb",
+	function (gltf) {
+		helipad = gltf.scene;
+		// helipad.castShadow = true;
+		helipad.position.x = -125;
+		helipad.position.y = 1;
+		helipad.position.z = -120;
+		helipad.scale.x = 5;
+		helipad.scale.y = 5;
+		helipad.scale.z = 5;
+		// console.log(helipad);
+
+		scene.add(helipad);
 	}
 );
 
@@ -103,8 +141,8 @@ loader.load(
 
 		mixerPlane = new THREE.AnimationMixer(plane);
 		const clips = gltf.animations;
-		console.log("plane");
-		console.log(clips);
+		// console.log("plane");
+		// console.log(clips);
 		const clip = THREE.AnimationClip.findByName(clips, "Animation");
 		const action = mixerPlane.clipAction(clip);
 		action.play();
@@ -133,27 +171,9 @@ loader.load(
 // 	}
 // );
 
-let airport_building;
-loader.load(
-	// resource URL
-	"models/airport_building1.glb",
-	function (gltf) {
-		airport_building = gltf.scene;
-		airport_building.castShadow = true;
-		airport_building.position.x = 110;
-		airport_building.position.y = 0;
-		airport_building.position.z = -138;
-		airport_building.scale.x = 1000;
-		airport_building.scale.y = 1000;
-		airport_building.scale.z = 1000;
-
-		// console.log(plane);
-		scene.add(airport_building);
-	}
-);
-
 let mixerHeli;
 let heli;
+let tempHeliClip;
 loader.load(
 	// resource URL
 	"models/heli.glb",
@@ -161,7 +181,7 @@ loader.load(
 		heli = gltf.scene;
 		heli.castShadow = true;
 		heli.position.x = -125;
-		heli.position.y = 5;
+		heli.position.y = 5.3;
 		heli.position.z = -110;
 		heli.scale.x = 3;
 		heli.scale.y = 3;
@@ -169,8 +189,12 @@ loader.load(
 
 		mixerHeli = new THREE.AnimationMixer(heli);
 		const clips = gltf.animations;
-		console.log(clips);
+		// console.log(clips);
 		const clip = THREE.AnimationClip.findByName(clips, "Animation");
+		// console.log("Clip heli");
+		// console.log(clip);
+		// console.log("Clip end");
+		tempHeliClip = clip;
 		const action = mixerHeli.clipAction(clip);
 		action.play();
 
@@ -263,7 +287,7 @@ window.addEventListener("resize", () => {
 	// update display width and height
 	width = window.innerWidth;
 	height = window.innerHeight;
-	console.log(width + " " + height);
+	// console.log(width + " " + height);
 	// update camera aspect
 	camera.aspect = width / height;
 	camera.updateProjectionMatrix();
@@ -325,25 +349,31 @@ function animate() {
 	// 	// camera.lookAt(shark.position)
 	// }
 
+	// Heli
 	if (heli != undefined) {
+		// console.log(tempHeliClip.duration);
 		// heli.position.x += 0.09;
 		// heli.position.y += 0.09;
 
-		if (turnHeli == 1) {
-			heli.position.y += 0.08;
-		} else {
-			heli.position.y -= 0.08;
+		if (turnHeli == 1 && clockHeli.elapsedTime > 8) {
+			heli.position.y += 0.2;
+		} else if (turnHeli == 0 && clockHeli.elapsedTime > 8 && clockHeli.elapsedTime < 60) {
+			heli.position.y -= 0.2;
+			let tempHeliPosY = heli.position.y;
+			if (tempHeliPosY < 5.3) {
+				heli.position.y = 5.3;
+			}
 		}
 
-		if (heli.position.y > 100) {
+		if (heli.position.y > 160 && turnHeli == 1) {
 			turnHeli = 0;
 			// heli.rotation.y = 600;
-		} else if (heli.position.y < 1) {
-			turnHeli = 1;
-			// heli.rotation.y = 0;
+		} else if (heli.position.y <= 5.3 && turnHeli == 0) {
+			if (clockHeli.elapsedTime > 60) {
+				turnHeli = 1;
+				clockHeli.elapsedTime = 0;
+			}
 		}
-
-		// camera.lookAt(shark.position)
 	}
 
 	// if (ballon != undefined) {
