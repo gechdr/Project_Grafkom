@@ -17,6 +17,23 @@ const texture = backgroundLoader.load("textures/Sky1.jpg");
 const scene = new THREE.Scene();
 scene.background = texture;
 
+// coba
+// const earthLoader = new THREE.TextureLoader();
+
+// const earthTexture = earthLoader.load('textures/earth.jpg')
+
+// var earthGeometry = new THREE.PlaneGeometry();
+
+// const earthMaterial = new THREE.MeshPhysicalMaterial();
+// earthMaterial.bumpMap = earthTexture;
+// earthMaterial.bumpScale = 1;
+// earthMaterial.map = earthTexture;
+
+// const earth = new THREE.Mesh(earthGeometry, earthMaterial)
+// earth.receiveShadow = false;
+// earth.castShadow = true;
+// scene.add(earth)
+
 // const ambientLight = new THREE.AmbientLight(0xffffff, 1);
 // scene.add(ambientLight);
 
@@ -25,7 +42,7 @@ scene.add(directionalLight);
 
 const light = new THREE.PointLight(0xffffff, 10);
 // (,ketinggian,)
-light.position.set(0, 0, 0);
+light.position.set(0, 10000, 0);
 
 light.castShadow = true;
 light.shadow.mapSize.width = width;
@@ -53,14 +70,16 @@ const loader = new GLTFLoader();
 let land;
 loader.load(
 	// resource URL
-	"models/land.glb",
+	"models/land2.glb",
 	function (gltf) {
 		land = gltf.scene;
 		// land.castShadow = true;
 		land.position.x = 0;
-		land.scale.x = 20;
-		land.scale.y = 20;
-		land.scale.z = 20;
+		land.position.y = 0;
+		land.position.z = 0;
+		land.scale.x = 0.1;
+		land.scale.y = 0.1;
+		land.scale.z = 0.1;
 		console.log(land);
 
 		scene.add(land);
@@ -75,10 +94,12 @@ loader.load(
 	function (gltf) {
 		plane = gltf.scene;
 		plane.castShadow = true;
-		plane.position.x = 40;
-		plane.scale.x = 8;
-		plane.scale.y = 8;
-		plane.scale.z = 8;
+		plane.position.x = -15;
+		plane.position.y = 6;
+		plane.position.z = 0;
+		plane.scale.x = 3;
+		plane.scale.y = 3;
+		plane.scale.z = 3;
 
 		mixerPlane = new THREE.AnimationMixer(plane);
 		const clips = gltf.animations;
@@ -112,6 +133,25 @@ loader.load(
 // 	}
 // );
 
+let airport_building;
+loader.load(
+	// resource URL
+	"models/airport_building1.glb",
+	function (gltf) {
+		airport_building = gltf.scene;
+		airport_building.castShadow = true;
+		airport_building.position.x = 110;
+		airport_building.position.y = 0;
+		airport_building.position.z = -138;
+		airport_building.scale.x = 1000;
+		airport_building.scale.y = 1000;
+		airport_building.scale.z = 1000;
+
+		// console.log(plane);
+		scene.add(airport_building);
+	}
+);
+
 let mixerHeli;
 let heli;
 loader.load(
@@ -120,10 +160,12 @@ loader.load(
 	function (gltf) {
 		heli = gltf.scene;
 		heli.castShadow = true;
-		heli.position.x = -40;
-		heli.scale.x = 5;
-		heli.scale.y = 5;
-		heli.scale.z = 5;
+		heli.position.x = -125;
+		heli.position.y = 5;
+		heli.position.z = -110;
+		heli.scale.x = 3;
+		heli.scale.y = 3;
+		heli.scale.z = 3;
 
 		mixerHeli = new THREE.AnimationMixer(heli);
 		const clips = gltf.animations;
@@ -196,12 +238,12 @@ loader.load(
 	function (gltf) {
 		hot_air = gltf.scene;
 		hot_air.castShadow = true;
-		hot_air.position.x = 10;
-		// hot_air.position.y = -40;
-		// hot_air.position.z = 40;
-		hot_air.scale.x = 1;
-		hot_air.scale.y = 1;
-		hot_air.scale.z = 1;
+		hot_air.position.x = -125;
+		hot_air.position.y = 0;
+		hot_air.position.z = 100;
+		hot_air.scale.x = 3;
+		hot_air.scale.y = 3;
+		hot_air.scale.z = 3;
 
 		// console.log(hot_air);
 		scene.add(hot_air);
@@ -293,10 +335,10 @@ function animate() {
 			heli.position.y -= 0.08;
 		}
 
-		if (heli.position.y > 50) {
+		if (heli.position.y > 100) {
 			turnHeli = 0;
 			// heli.rotation.y = 600;
-		} else if (heli.position.y < -50) {
+		} else if (heli.position.y < 1) {
 			turnHeli = 1;
 			// heli.rotation.y = 0;
 		}
@@ -365,10 +407,10 @@ function animate() {
 			hot_air.position.y -= 0.02;
 		}
 
-		if (hot_air.position.y > 20) {
+		if (hot_air.position.y > 50) {
 			turnHotAir = 0;
 			// heli.rotation.y = 600;
-		} else if (hot_air.position.y < -20) {
+		} else if (hot_air.position.y < 1) {
 			turnHotAir = 1;
 			// heli.rotation.y = 0;
 		}
