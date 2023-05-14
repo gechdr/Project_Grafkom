@@ -17,48 +17,28 @@ const texture = backgroundLoader.load("textures/Sky1.jpg");
 const scene = new THREE.Scene();
 scene.background = texture;
 
-// coba
-// const earthLoader = new THREE.TextureLoader();
+// Light
+const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+scene.add(ambientLight);
 
-// const earthTexture = earthLoader.load('textures/earth.jpg')
+// const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+// scene.add(directionalLight);
 
-// var earthGeometry = new THREE.PlaneGeometry();
-
-// const earthMaterial = new THREE.MeshPhysicalMaterial();
-// earthMaterial.bumpMap = earthTexture;
-// earthMaterial.bumpScale = 1;
-// earthMaterial.map = earthTexture;
-
-// const earth = new THREE.Mesh(earthGeometry, earthMaterial)
-// earth.receiveShadow = false;
-// earth.castShadow = true;
-// scene.add(earth)
-
-// const ambientLight = new THREE.AmbientLight(0xffffff, 1);
-// scene.add(ambientLight);
-
-const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-scene.add(directionalLight);
-
-const light = new THREE.PointLight(0xffffff, 10);
+// const light = new THREE.PointLight(0xffffff, 12);
+const light = new THREE.DirectionalLight(0xffffff, 12);
 // (,ketinggian,)
-light.position.set(0, 10000, 0);
+light.position.set(0, 1000, 0);
 
+// light.shadow.camera.left = -1000000
+// light.shadow.camera.right = 1000000
+// light.shadow.camera.bottom = -1000000
+// light.shadow.camera.top = 1000000
 light.castShadow = true;
 light.shadow.mapSize.width = width;
 light.shadow.mapSize.height = height;
-light.shadow.camera.near = 1;
-light.shadow.camera.far = 1000;
+light.shadow.camera.near = 0.1;
+light.shadow.camera.far = 100000;
 scene.add(light);
-
-// light.position.set(10, 10, 10);
-
-// light.castShadow = true;
-// light.shadow.mapSize.width = width;
-// light.shadow.mapSize.height = height;
-// light.shadow.camera.near = 1;
-// light.shadow.camera.far = 1000;
-// scene.add(light);
 
 // camera
 const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 10000);
@@ -74,6 +54,7 @@ loader.load(
 	function (gltf) {
 		land = gltf.scene;
 		// land.castShadow = true;
+		land.receiveShadow = true;
 		land.position.x = 0;
 		land.position.y = 0;
 		land.position.z = 0;
@@ -81,27 +62,69 @@ loader.load(
 		land.scale.y = 0.1;
 		land.scale.z = 0.1;
 		// console.log(land);
+		land.traverse(function (node) {
+			if (node.isMesh) { node.receiveShadow = true; }
+		})
 
 		scene.add(land);
 	}
 );
 
-let airport_building;
+let airport_building1;
 loader.load(
 	// resource URL
 	"models/airport_building1.glb",
 	function (gltf) {
-		airport_building = gltf.scene;
-		airport_building.castShadow = true;
-		airport_building.position.x = 110;
-		airport_building.position.y = 0;
-		airport_building.position.z = -138;
-		airport_building.scale.x = 1000;
-		airport_building.scale.y = 1000;
-		airport_building.scale.z = 1000;
+		airport_building1 = gltf.scene;
+		airport_building1.castShadow = true;
+		airport_building1.position.x = 110;
+		airport_building1.position.y = 0;
+		airport_building1.position.z = -138;
+		airport_building1.scale.x = 1000;
+		airport_building1.scale.y = 1000;
+		airport_building1.scale.z = 1000;
 
 		// console.log(plane);
-		scene.add(airport_building);
+		scene.add(airport_building1);
+	}
+);
+
+let airport_building2;
+loader.load(
+	// resource URL
+	"models/airport_building2.glb",
+	function (gltf) {
+		airport_building2 = gltf.scene;
+		airport_building2.castShadow = true;
+		airport_building2.position.x = 130;
+		airport_building2.position.y = 0;
+		airport_building2.position.z = 55;
+		airport_building2.scale.x = 0.04;
+		airport_building2.scale.y = 0.04;
+		airport_building2.scale.z = 0.04;
+		airport_building2.rotation.y = -300;
+
+		// console.log(plane);
+		scene.add(airport_building2);
+	}
+);
+
+loader.load(
+	// resource URL
+	"models/airport_building2.glb",
+	function (gltf) {
+		airport_building2 = gltf.scene;
+		airport_building2.castShadow = true;
+		airport_building2.position.x = 130;
+		airport_building2.position.y = 0;
+		airport_building2.position.z = 135;
+		airport_building2.scale.x = 0.04;
+		airport_building2.scale.y = 0.04;
+		airport_building2.scale.z = 0.04;
+		airport_building2.rotation.y = -300;
+
+		// console.log(plane);
+		scene.add(airport_building2);
 	}
 );
 
@@ -152,25 +175,6 @@ loader.load(
 	}
 );
 
-// let ballon;
-// loader.load(
-// 	// resource URL
-// 	"models/zeppelin_air_balloon.glb",
-// 	function (gltf) {
-// 		ballon = gltf.scene;
-// 		ballon.castShadow = true;
-// 		ballon.position.x = 70;
-// 		ballon.position.z = -90;
-// 		ballon.scale.x = 1;
-// 		ballon.scale.y = 1;
-// 		ballon.scale.z = 1;
-// 		ballon.rotation.y = 30;
-
-// 		// console.log(plane);
-// 		scene.add(ballon);
-// 	}
-// );
-
 let mixerHeli;
 let heli;
 let tempHeliClip;
@@ -202,31 +206,6 @@ loader.load(
 		scene.add(heli);
 	}
 );
-
-// let mixerRocket;
-// let rocket;
-// loader.load(
-// 	// resource URL
-// 	"models/rocket_ship.glb",
-// 	function (gltf) {
-// 		rocket = gltf.scene;
-// 		rocket.castShadow = true;
-// 		rocket.position.x = 0;
-// 		rocket.position.z = 40;
-// 		rocket.scale.x = 0.1;
-// 		rocket.scale.y = 0.1;
-// 		rocket.scale.z = 0.1;
-
-// 		mixerRocket = new THREE.AnimationMixer(rocket);
-// 		const clips = gltf.animations;
-// 		// console.log(clips);
-// 		const clip = THREE.AnimationClip.findByName(clips, "Take 001");
-// 		const action = mixerRocket.clipAction(clip);
-// 		action.play();
-// 		// console.log(rocket);
-// 		scene.add(rocket);
-// 	}
-// );
 
 let mixerDrone;
 let drone;
@@ -269,8 +248,65 @@ loader.load(
 		hot_air.scale.y = 3;
 		hot_air.scale.z = 3;
 
+		// hot_air.traverse( function( node ) { if ( node instanceof THREE.Mesh ) { node.castShadow = true; } } );
 		// console.log(hot_air);
 		scene.add(hot_air);
+	}
+);
+
+let car_pack;
+loader.load(
+	// resource URL
+	"models/car_pack.glb",
+	function (gltf) {
+		car_pack = gltf.scene;
+		car_pack.castShadow = true;
+		car_pack.position.x = -125;
+		car_pack.position.y = 0;
+		car_pack.position.z = 99;
+		car_pack.scale.x = 3;
+		car_pack.scale.y = 3;
+		car_pack.scale.z = 3;
+
+		scene.add(car_pack);
+	}
+);
+
+let bus1;
+loader.load(
+	// resource URL
+	"models/bus1.glb",
+	function (gltf) {
+		bus1 = gltf.scene;
+		bus1.castShadow = true;
+		bus1.position.x = -40;
+		bus1.position.y = 1;
+		bus1.position.z = 150;
+		bus1.scale.x = 3;
+		bus1.scale.y = 3;
+		bus1.scale.z = 3;
+		bus1.rotation.y = 150;
+
+		scene.add(bus1);
+	}
+);
+
+let bus2;
+loader.load(
+	// resource URL
+	"models/bus2.glb",
+	function (gltf) {
+		bus2 = gltf.scene;
+		bus2.castShadow = true;
+		bus2.position.x = 70;
+		bus2.position.y = 1;
+		bus2.position.z = 52;
+		bus2.scale.x = 0.55;
+		bus2.scale.y = 0.55;
+		bus2.scale.z = 0.55;
+		bus2.rotation.y = -400;
+
+		scene.add(bus2);
 	}
 );
 
@@ -327,28 +363,6 @@ const clockRocket = new THREE.Clock();
 const clockDrone = new THREE.Clock();
 const clockPlane = new THREE.Clock();
 function animate() {
-	// if (plane != undefined) {
-	// 	// plane.position.x += 0.09;
-	// 	// plane.position.y += 0.09;
-
-	// 	if (turnPlane == 1) {
-	// 		plane.position.z += 0.09;
-	// 	} else {
-	// 		plane.position.z -= 0.09;
-	// 	}
-
-	// 	if (plane.position.z > 100) {
-	// 		turnPlane = 0;
-	// 		plane.rotation.y = 600;
-	// 	} else if (plane.position.z < -100) {
-	// 		turnPlane = 1;
-	// 		plane.rotation.y = 0;
-	// 	}
-
-	// 	// console.log(plane.rotation.z);
-	// 	// camera.lookAt(shark.position)
-	// }
-
 	// Heli
 	if (heli != undefined) {
 		// console.log(tempHeliClip.duration);
@@ -376,57 +390,6 @@ function animate() {
 		}
 	}
 
-	// if (ballon != undefined) {
-	// 	// heli.position.x += 0.09;
-	// 	// heli.position.y += 0.09;
-
-	// 	// y 70 z -90
-
-	// 	if (turnBallon == 1) {
-	// 		ballon.position.y -= 0.5;
-	// 		ballon.position.x -= 1;
-	// 	} else {
-	// 		ballon.position.y += 0.5;
-	// 		ballon.position.x += 1;
-	// 	}
-
-	// 	// console.log(ballon);
-	// 	// if (ballon.position.y > 60) {
-	// 	// 	turnBallon = 1;
-	// 	// 	// ballon.rotation.x = 600;
-	// 	// 	// ballon.rotation.y = 600;
-	// 	// 	// ballon.rotation.z = 0;
-	// 	// 	// ballon.rotation._y = 500;
-	// 	// } else if (ballon.position.y < -100) {
-	// 	// 	turnBallon = 0;
-	// 	// 	// ballon.rotation.x = 100;
-	// 	// 	// ballon.rotation.y = 200;
-	// 	// 	// ballon.rotation.z = 100;
-	// 	// }
-
-	// 	// camera.lookAt(shark.position)
-	// }
-
-	// if (rocket != undefined) {
-	// 	if (rocket.position.y < 600) {
-	// 		rocket.position.y += 0.5;
-	// 		rocket.position.x -= 1;
-
-	// 		// rocket.rotation.y += 0.01;
-	// 		// rocket.rotation.z += 0.1;
-	// 		// rocket.rotation.x += 0.1;
-	// 	} else {
-	// 		// rocket.position.y = -50;
-	// 		// rocket.position.x = 0;
-	// 		rocket.position.y = -300;
-	// 		rocket.position.x = 400;
-
-	// 		// ballon/.rotation.y = 0;
-	// 	}
-
-	// 	// camera.lookAt(shark.position)
-	// }
-
 	if (hot_air != undefined) {
 		// heli.position.x += 0.09;
 		// heli.position.y += 0.09;
@@ -451,9 +414,6 @@ function animate() {
 	if (mixerHeli) {
 		mixerHeli.update(clockHeli.getDelta());
 	}
-	// if (mixerRocket) {
-	// 	mixerRocket.update(clockRocket.getDelta());
-	// }
 	if (mixerDrone) {
 		mixerDrone.update(clockDrone.getDelta());
 	}
