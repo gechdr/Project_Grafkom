@@ -122,6 +122,24 @@ function update() {
   // ixLightcubeAnimation();
 }
 
+var scale = 1;
+var mouseX = 0;
+var mouseY = 0;
+
+// camera.rotation.order = "XYZ"; // this is not the default
+
+// document.addEventListener( "mousemove", mouseMove, false );
+
+// function mouseMove( event ) {
+
+//     mouseX = - ( event.clientX / renderer.domElement.clientWidth ) * 2 + 1;
+//     mouseY = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1;
+
+//     camera.rotation.x = mouseY / scale;
+//     camera.rotation.y = mouseX / scale;
+
+// }
+
 // Models
 
 const loader = new GLTFLoader();
@@ -148,28 +166,6 @@ loader.load(
 		scene.add(land);
 	}
 );
-
-// const geometry = new THREE.BoxGeometry( 500, 0, 500 ); 
-// // const material = new THREE.ShadowMaterial({color: 0x000000});
-// // material.opacity = 0.2;
-// const material = new THREE.MeshBasicMaterial({color: 0x999999});
-// const cube = new THREE.Mesh( geometry, material ); 
-// cube.receiveShadow = true;
-// cube.traverse(function (node) {
-// 	if (node.isMesh) { node.receiveShadow = true; }
-// })
-// scene.add( cube );
-
-// const geometry1 = new THREE.BoxGeometry( 500, 1, 500 ); 
-// const material1 = new THREE.ShadowMaterial({color: 0x000000});
-// material1.opacity = 0.2;
-// const cube1 = new THREE.Mesh( geometry1, material1 ); 
-// cube1.receiveShadow = true;
-// cube1.traverse(function (node) {
-// 	if (node.isMesh) { node.receiveShadow = true; }
-// })
-// scene.add( cube1 );
-
 
 let airport_building1;
 loader.load(
@@ -448,16 +444,16 @@ function animate() {
 		// heli.position.y += 0.09;
 
 		if (turnHeli == 1 && clockHeli.elapsedTime > 8) {
-			heli.position.y += 0.3;
+			heli.position.y += 0.062;
 		} else if (turnHeli == 0 && clockHeli.elapsedTime > 8 && clockHeli.elapsedTime < 60) {
-			heli.position.y -= 0.2;
+			heli.position.y -= 0.062;
 			let tempHeliPosY = heli.position.y;
 			if (tempHeliPosY < 5.3) {
 				heli.position.y = 5.3;
 			}
 		}
 
-		console.log(clockHeli.elapsedTime);
+		// console.log(clockHeli.elapsedTime + " - " + heli.position.y);
 
 		if (heli.position.y > 165 && turnHeli == 1) {
 			turnHeli = 0;
