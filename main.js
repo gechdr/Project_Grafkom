@@ -52,13 +52,11 @@ const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 10000);
 // camera.position.set(50, 20, 150);
 // camera.lookAt(0, 0, 0);
 
-// First Person Controls
-let firstControls = [];
 let player = {
   height: 5,
   turnSpeed: .1,
   speed: .1,
-  jumpHeight: .2,
+  jumpHeight: .3,
   gravity: .01,
   velocity: 0,
   
@@ -68,77 +66,145 @@ let player = {
 camera.position.set(0, player.height, -5);
 camera.lookAt(new THREE.Vector3(0, player.height, 0));
 
+// renderer
+const renderer = new THREE.WebGL1Renderer({ antialias: true, powerPreference: "high-performance", logarithmicDepthBuffer: true });
+renderer.setSize(width, height);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+// renderer.shadowMap.type = THREE.BasicShadowMap;
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-// .. 
+window.addEventListener("resize", () => {
+	// update display width and height
+	width = window.innerWidth;
+	height = window.innerHeight;
+	// console.log(width + " " + height);
+	// update camera aspect
+	camera.aspect = width / height;
+	camera.updateProjectionMatrix();
+	// update renderer
+	renderer.setSize(width, height);
+	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+	renderer.render(scene, camera);
+});
 
-// Controls:Listeners
-document.addEventListener('keydown', ({ keyCode }) => { firstControls[keyCode] = true });
-document.addEventListener('keyup', ({ keyCode }) => { firstControls[keyCode] = false });
+// Controls
+// let controls1 = new FlyControls(camera, renderer.domElement);
+// controls1.movementSpeed = 10;
+// controls1.rollSpeed = 0.05;
+// controls1.autoForward = false;
+// controls1.dragToLook = false;
 
-function control() {
-  // Controls:Engine 
-  if(firstControls[87]){ // w
-    camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
-    camera.position.z -= -Math.cos(camera.rotation.y) * player.speed;
-  }
-  if(firstControls[83]){ // s
-    camera.position.x += Math.sin(camera.rotation.y) * player.speed;
-    camera.position.z += -Math.cos(camera.rotation.y) * player.speed;
-  }
-  if(firstControls[65]){ // a
-    camera.position.x += Math.sin(camera.rotation.y + Math.PI / 2) * player.speed;
-    camera.position.z += -Math.cos(camera.rotation.y + Math.PI / 2) * player.speed;
-  }
-  if(firstControls[68]){ // d
-    camera.position.x += Math.sin(camera.rotation.y - Math.PI / 2) * player.speed;
-    camera.position.z += -Math.cos(camera.rotation.y - Math.PI / 2) * player.speed;
-  }
-  if(firstControls[37]){ // la
-    camera.rotation.y -= player.turnSpeed;
-  }
-  if(firstControls[39]){ // ra
-    camera.rotation.y += player.turnSpeed;
-  }
-  if(firstControls[32]) { // space
-    if(player.jumps) return false;
-    player.jumps = true;
-    player.velocity = -player.jumpHeight;
-  }
-}
+// let controls = new OrbitControls(camera, renderer.domElement);
+// controls.autoRotate = false;
+// controls.target = new THREE.Vector3(2, 2, 2);
 
-function ixMovementUpdate() {
-  player.velocity += player.gravity;
-  camera.position.y -= player.velocity;
-  
-  if(camera.position.y < player.height) {
-    camera.position.y = player.height;
-    player.jumps = false;
-  }
-}
+const pointerControls = new PointerLockControls(camera, renderer.domElement)
+document.addEventListener( 'click', function () {
 
+  pointerControls.lock();
+
+},false );
+scene.add(pointerControls.getObject());
+
+// Event listener for PointerLockControls change
+document.addEventListener('pointerlockchange', () => {
+  pointerControls.isLocked ? pointerControls.lock() : pointerControls.unlock();
+});
+
+// WASD key controls for movement
+const movement = {
+  forward: false,
+  backward: false,
+  left: false,
+  right: false
+};
+
+document.addEventListener('keydown', (event) => {
+  switch (event.code) {
+    case 'KeyW':
+      movement.forward = true;
+      break;
+    case 'KeyA':
+      movement.left = true;
+      break;
+    case 'KeyS':
+      movement.backward = true;
+      break;
+    case 'KeyD':
+      movement.right = true;
+      break;
+  }
+});
+
+document.addEventListener('keyup', (event) => {
+  switch (event.code) {
+    case 'KeyW':
+      movement.forward = false;
+      break;
+    case 'KeyA':
+      movement.left = false;
+      break;
+    case 'KeyS':
+      movement.backward = false;
+      break;
+    case 'KeyD':
+      movement.right = false;
+      break;
+  }
+});
+
+// Update camera position based on WASD movement
 function update() {
-  control();
-  ixMovementUpdate();
-  // ixLightcubeAnimation();
+
+  const speed = 0.1;
+
+  const forward = movement.forward ? 1 : 0;
+  const backward = movement.backward ? 1 : 0;
+  const left = movement.left ? 1 : 0;
+  const right = movement.right ? 1 : 0;
+
+  const direction = new THREE.Vector3(right - left, 0, backward - forward);
+  direction.normalize();
+
+  const moveVector = new THREE.Vector3(direction.x, 0, direction.z);
+  moveVector.applyQuaternion(camera.quaternion);
+  moveVector.multiplyScalar(speed);
+
+	// Check camera tembus bawah
+	if (camera.position.y < 5) {
+  	camera.position.y = 5; // Set camera position to ground level
+  }
+
+	// Check camera terbang
+	if (camera.position.y > 5) {
+  	camera.position.y = 5; // Set camera position to ground level
+  }
+
+	// console.log(parseInt(camera.position.x) + "," + parseInt(camera.position.y) + "," + parseInt(camera.position.z));
+
+	// Check camera mentok Utara
+	if (camera.position.z > 191) {
+  	camera.position.z = 191; // Set camera position to ground level
+  }
+
+	// Check camera mentok Barat
+	if (camera.position.x > 193) {
+  	camera.position.x = 193; // Set camera position to ground level
+  }
+
+	// Check camera mentok Timur
+	if (camera.position.x < -225) {
+  	camera.position.x = -225; // Set camera position to ground level
+  }
+
+	// Check camera mentok Utara
+	if (camera.position.z < -227) {
+  	camera.position.z = -227; // Set camera position to ground level
+  }
+
+  camera.position.add(moveVector);
 }
-
-var scale = 1;
-var mouseX = 0;
-var mouseY = 0;
-
-// camera.rotation.order = "XYZ"; // this is not the default
-
-// document.addEventListener( "mousemove", mouseMove, false );
-
-// function mouseMove( event ) {
-
-//     mouseX = - ( event.clientX / renderer.domElement.clientWidth ) * 2 + 1;
-//     mouseY = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1;
-
-//     camera.rotation.x = mouseY / scale;
-//     camera.rotation.y = mouseX / scale;
-
-// }
 
 // Models
 
@@ -381,56 +447,7 @@ loader.load(
 	}
 );
 
-// .
 
-// renderer
-const renderer = new THREE.WebGL1Renderer({ antialias: true, powerPreference: "high-performance", logarithmicDepthBuffer: true });
-renderer.setSize(width, height);
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-// renderer.shadowMap.type = THREE.BasicShadowMap;
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-window.addEventListener("resize", () => {
-	// update display width and height
-	width = window.innerWidth;
-	height = window.innerHeight;
-	// console.log(width + " " + height);
-	// update camera aspect
-	camera.aspect = width / height;
-	camera.updateProjectionMatrix();
-	// update renderer
-	renderer.setSize(width, height);
-	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-	renderer.render(scene, camera);
-});
-
-// Controls
-// let controls1 = new FlyControls(camera, renderer.domElement);
-// controls1.movementSpeed = 10;
-// controls1.rollSpeed = 0.05;
-// controls1.autoForward = false;
-// controls1.dragToLook = false;
-
-// let controls = new OrbitControls(camera, renderer.domElement);
-// controls.autoRotate = false;
-// controls.target = new THREE.Vector3(2, 2, 2);
-
-const controls3 = new PointerLockControls(camera, renderer.domElement)
-document.addEventListener( 'click', function () {
-
-  controls3.lock();
-
-},false );
-
-// controls.keys = {
-// 	LEFT: "KeyA",
-// 	UP: "KeyW",
-// 	RIGHT: "KeyD",
-// 	BOTTOM: "KeyS"
-// };
-// controls.listenToKeyEvents(window);
-// controls.addEventListener(window);
 
 let turnHeli = 1;
 let turnHotAir = 1;
@@ -498,6 +515,8 @@ function animate() {
 	// controls.update();
 
 	requestAnimationFrame(animate);
+	
+	camera.rotation.y = pointerControls.getObject().rotation.y;
 	update();
 
 	renderer.render(scene, camera);
