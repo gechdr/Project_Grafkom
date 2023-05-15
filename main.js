@@ -5,6 +5,8 @@ import { GLTFLoader } from "./GLTFLoader.js";
 import { EffectComposer } from "./EffectComposer.js";
 import { RenderPass } from "./RenderPass.js";
 import { UnrealBloomPass } from "./UnrealBloomPass.js";
+import { FirstPersonControls } from './FirstPersonControls.js';
+import { PointerLockControls } from './PointerLockControls.js';
 
 let width = window.innerWidth;
 let height = window.innerHeight;
@@ -47,82 +49,166 @@ scene.add(light);
 
 // camera
 const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 10000);
-camera.position.set(50, 20, 150);
-camera.lookAt(0, 0, 0);
+// camera.position.set(50, 20, 150);
+// camera.lookAt(0, 0, 0);
+
+// First Person Controls
+let firstControls = [];
+let player = {
+  height: 5,
+  turnSpeed: .1,
+  speed: .1,
+  jumpHeight: .2,
+  gravity: .01,
+  velocity: 0,
+  
+  playerJumps: false
+};
+
+camera.position.set(0, player.height, -5);
+camera.lookAt(new THREE.Vector3(0, player.height, 0));
+
+
+// .. 
+
+// Controls:Listeners
+document.addEventListener('keydown', ({ keyCode }) => { firstControls[keyCode] = true });
+document.addEventListener('keyup', ({ keyCode }) => { firstControls[keyCode] = false });
+
+function control() {
+  // Controls:Engine 
+  if(firstControls[87]){ // w
+    camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
+    camera.position.z -= -Math.cos(camera.rotation.y) * player.speed;
+  }
+  if(firstControls[83]){ // s
+    camera.position.x += Math.sin(camera.rotation.y) * player.speed;
+    camera.position.z += -Math.cos(camera.rotation.y) * player.speed;
+  }
+  if(firstControls[65]){ // a
+    camera.position.x += Math.sin(camera.rotation.y + Math.PI / 2) * player.speed;
+    camera.position.z += -Math.cos(camera.rotation.y + Math.PI / 2) * player.speed;
+  }
+  if(firstControls[68]){ // d
+    camera.position.x += Math.sin(camera.rotation.y - Math.PI / 2) * player.speed;
+    camera.position.z += -Math.cos(camera.rotation.y - Math.PI / 2) * player.speed;
+  }
+  if(firstControls[37]){ // la
+    camera.rotation.y -= player.turnSpeed;
+  }
+  if(firstControls[39]){ // ra
+    camera.rotation.y += player.turnSpeed;
+  }
+  if(firstControls[32]) { // space
+    if(player.jumps) return false;
+    player.jumps = true;
+    player.velocity = -player.jumpHeight;
+  }
+}
+
+function ixMovementUpdate() {
+  player.velocity += player.gravity;
+  camera.position.y -= player.velocity;
+  
+  if(camera.position.y < player.height) {
+    camera.position.y = player.height;
+    player.jumps = false;
+  }
+}
+
+function update() {
+  control();
+  ixMovementUpdate();
+  // ixLightcubeAnimation();
+}
+
+// Models
 
 const loader = new GLTFLoader();
 
-// let land;
-// loader.load(
-// 	// resource URL
-// 	"models/land2.glb",
-// 	function (gltf) {
-// 		land = gltf.scene;
-// 		// land.castShadow = true;
-// 		land.receiveShadow = true;
-// 		land.position.x = 0;
-// 		land.position.y = 0;
-// 		land.position.z = 0;
-// 		land.scale.x = 0.1;
-// 		land.scale.y = 0.1;
-// 		land.scale.z = 0.1;
-// 		// console.log(land);
-// 		land.traverse(function (node) {
-// 			if (node.isMesh) { node.receiveShadow = true; }
-// 		})
+let land;
+loader.load(
+	// resource URL
+	"models/land2.glb",
+	function (gltf) {
+		land = gltf.scene;
+		// land.castShadow = true;
+		land.receiveShadow = true;
+		land.position.x = 0;
+		land.position.y = 0;
+		land.position.z = 0;
+		land.scale.x = 0.1;
+		land.scale.y = 0.1;
+		land.scale.z = 0.1;
+		// console.log(land);
+		land.traverse(function (node) {
+			if (node.isMesh) { node.receiveShadow = true; }
+		})
 
-// 		scene.add(land);
-// 	}
-// );
+		scene.add(land);
+	}
+);
 
-const geometry = new THREE.BoxGeometry( 500, 0, 500 ); 
-const material = new THREE.ShadowMaterial({color: 0x000000});
-material.opacity = 0.2;
-const cube = new THREE.Mesh( geometry, material ); 
-cube.receiveShadow = true;
-cube.traverse(function (node) {
-	if (node.isMesh) { node.receiveShadow = true; }
-})
-scene.add( cube );
+// const geometry = new THREE.BoxGeometry( 500, 0, 500 ); 
+// // const material = new THREE.ShadowMaterial({color: 0x000000});
+// // material.opacity = 0.2;
+// const material = new THREE.MeshBasicMaterial({color: 0x999999});
+// const cube = new THREE.Mesh( geometry, material ); 
+// cube.receiveShadow = true;
+// cube.traverse(function (node) {
+// 	if (node.isMesh) { node.receiveShadow = true; }
+// })
+// scene.add( cube );
 
-// let airport_building1;
-// loader.load(
-// 	// resource URL
-// 	"models/airport_building1.glb",
-// 	function (gltf) {
-// 		airport_building1 = gltf.scene;
-// 		// airport_building1.castShadow = true;
-// 		airport_building1.position.x = 110;
-// 		airport_building1.position.y = 0;
-// 		airport_building1.position.z = -138;
-// 		airport_building1.scale.x = 1000;
-// 		airport_building1.scale.y = 1000;
-// 		airport_building1.scale.z = 1000;
-// 		airport_building1.traverse( function( node ) { if ( node.isMesh) { node.castShadow = true; } } );
-// 		// console.log(plane);
-// 		scene.add(airport_building1);
-// 	}
-// );
+// const geometry1 = new THREE.BoxGeometry( 500, 1, 500 ); 
+// const material1 = new THREE.ShadowMaterial({color: 0x000000});
+// material1.opacity = 0.2;
+// const cube1 = new THREE.Mesh( geometry1, material1 ); 
+// cube1.receiveShadow = true;
+// cube1.traverse(function (node) {
+// 	if (node.isMesh) { node.receiveShadow = true; }
+// })
+// scene.add( cube1 );
 
-// let airport_building2;
-// loader.load(
-// 	// resource URL
-// 	"models/airport_building2.glb",
-// 	function (gltf) {
-// 		airport_building2 = gltf.scene;
-// 		// airport_building2.castShadow = true;
-// 		airport_building2.position.x = 130;
-// 		airport_building2.position.y = 0;
-// 		airport_building2.position.z = 55;
-// 		airport_building2.scale.x = 0.04;
-// 		airport_building2.scale.y = 0.04;
-// 		airport_building2.scale.z = 0.04;
-// 		airport_building2.rotation.y = -300;
-// 		airport_building2.traverse( function( node ) { if ( node.isMesh) { node.castShadow = true; } } );
-// 		// console.log(plane);
-// 		scene.add(airport_building2);
-// 	}
-// );
+
+let airport_building1;
+loader.load(
+	// resource URL
+	"models/airport_building1.glb",
+	function (gltf) {
+		airport_building1 = gltf.scene;
+		// airport_building1.castShadow = true;
+		airport_building1.position.x = 110;
+		airport_building1.position.y = 0;
+		airport_building1.position.z = -138;
+		airport_building1.scale.x = 1000;
+		airport_building1.scale.y = 1000;
+		airport_building1.scale.z = 1000;
+		airport_building1.traverse( function( node ) { if ( node.isMesh) { node.castShadow = true; } } );
+		// console.log(plane);
+		scene.add(airport_building1);
+	}
+);
+
+let airport_building2;
+loader.load(
+	// resource URL
+	"models/airport_building2.glb",
+	function (gltf) {
+		airport_building2 = gltf.scene;
+		// airport_building2.castShadow = true;
+		airport_building2.position.x = 130;
+		airport_building2.position.y = 0;
+		airport_building2.position.z = 55;
+		airport_building2.scale.x = 0.04;
+		airport_building2.scale.y = 0.04;
+		airport_building2.scale.z = 0.04;
+		airport_building2.rotation.y = -300;
+		airport_building2.traverse( function( node ) { if ( node.isMesh) { node.castShadow = true; } } );
+		// console.log(plane);
+		scene.add(airport_building2);
+	}
+);
 
 // loader.load(
 // 	// resource URL
@@ -163,6 +249,8 @@ loader.load(
 	}
 );
 
+
+// GANTI PESAWAT
 let mixerPlane;
 let plane;
 loader.load(
@@ -172,8 +260,8 @@ loader.load(
 		plane = gltf.scene;
 		// plane.castShadow = true;
 		plane.position.x = -15;
-		plane.position.y = 6;
-		plane.position.z = 0;
+		plane.position.y = 3;
+		plane.position.z = -20;
 		plane.scale.x = 3;
 		plane.scale.y = 3;
 		plane.scale.z = 3;
@@ -184,7 +272,7 @@ loader.load(
 		// console.log(clips);
 		const clip = THREE.AnimationClip.findByName(clips, "Animation");
 		const action = mixerPlane.clipAction(clip);
-		action.play();
+		// action.play();
 
 		// console.log(plane);
 		scene.add(plane);
@@ -211,42 +299,12 @@ loader.load(
 		const clips = gltf.animations;
 		// console.log(clips);
 		const clip = THREE.AnimationClip.findByName(clips, "Animation");
-		// console.log("Clip heli");
-		// console.log(clip);
-		// console.log("Clip end");
 		tempHeliClip = clip;
 		const action = mixerHeli.clipAction(clip);
 		action.play();
 
 		// console.log(heli);
 		scene.add(heli);
-	}
-);
-
-let mixerDrone;
-let drone;
-loader.load(
-	// resource URL
-	"models/s9_mini_drone.glb",
-	function (gltf) {
-		drone = gltf.scene;
-		// drone.castShadow = true;
-		drone.position.x = 0;
-		drone.position.z = 40;
-		drone.scale.x = 0.1;
-		drone.scale.y = 0.1;
-		drone.scale.z = 0.1;
-		// console.log("drone");f
-
-		mixerDrone = new THREE.AnimationMixer(drone);
-		const clips = gltf.animations;
-		// console.log(clips);
-		const clip = THREE.AnimationClip.findByName(clips, "Take 01");
-		const action = mixerDrone.clipAction(clip);
-		action.play();
-
-		// console.log(drone);
-		scene.add(drone);
 	}
 );
 
@@ -271,23 +329,23 @@ loader.load(
 	}
 );
 
-// let car_pack;
-// loader.load(
-// 	// resource URL
-// 	"models/car_pack.glb",
-// 	function (gltf) {
-// 		car_pack = gltf.scene;
-// 		// car_pack.castShadow = true;
-// 		car_pack.position.x = -125;
-// 		car_pack.position.y = 0;
-// 		car_pack.position.z = 99;
-// 		car_pack.scale.x = 3;
-// 		car_pack.scale.y = 3;
-// 		car_pack.scale.z = 3;
-// 		car_pack.traverse( function( node ) { if ( node.isMesh) { node.castShadow = true; } } );
-// 		scene.add(car_pack);
-// 	}
-// );
+let car_pack;
+loader.load(
+	// resource URL
+	"models/car_pack.glb",
+	function (gltf) {
+		car_pack = gltf.scene;
+		// car_pack.castShadow = true;
+		car_pack.position.x = -125;
+		car_pack.position.y = 0;
+		car_pack.position.z = 99;
+		car_pack.scale.x = 3;
+		car_pack.scale.y = 3;
+		car_pack.scale.z = 3;
+		car_pack.traverse( function( node ) { if ( node.isMesh) { node.castShadow = true; } } );
+		scene.add(car_pack);
+	}
+);
 
 let bus1;
 loader.load(
@@ -352,15 +410,22 @@ window.addEventListener("resize", () => {
 });
 
 // Controls
-let controls1 = new FlyControls(camera, renderer.domElement);
-controls1.movementSpeed = 10;
-controls1.rollSpeed = 0.05;
-controls1.autoForward = false;
-controls1.dragToLook = false;
+// let controls1 = new FlyControls(camera, renderer.domElement);
+// controls1.movementSpeed = 10;
+// controls1.rollSpeed = 0.05;
+// controls1.autoForward = false;
+// controls1.dragToLook = false;
 
-let controls = new OrbitControls(camera, renderer.domElement);
-controls.autoRotate = false;
-controls.target = new THREE.Vector3(2, 2, 2);
+// let controls = new OrbitControls(camera, renderer.domElement);
+// controls.autoRotate = false;
+// controls.target = new THREE.Vector3(2, 2, 2);
+
+const controls3 = new PointerLockControls(camera, renderer.domElement)
+document.addEventListener( 'click', function () {
+
+  controls3.lock();
+
+},false );
 
 // controls.keys = {
 // 	LEFT: "KeyA",
@@ -371,15 +436,10 @@ controls.target = new THREE.Vector3(2, 2, 2);
 // controls.listenToKeyEvents(window);
 // controls.addEventListener(window);
 
-let turnPlane = 1;
 let turnHeli = 1;
-// let turnBallon = 1;
 let turnHotAir = 1;
 
 const clockHeli = new THREE.Clock();
-const clockRocket = new THREE.Clock();
-const clockDrone = new THREE.Clock();
-const clockPlane = new THREE.Clock();
 function animate() {
 	// Heli
 	if (heli != undefined) {
@@ -390,12 +450,14 @@ function animate() {
 		if (turnHeli == 1 && clockHeli.elapsedTime > 8) {
 			heli.position.y += 0.3;
 		} else if (turnHeli == 0 && clockHeli.elapsedTime > 8 && clockHeli.elapsedTime < 60) {
-			heli.position.y -= 0.3;
+			heli.position.y -= 0.2;
 			let tempHeliPosY = heli.position.y;
 			if (tempHeliPosY < 5.3) {
 				heli.position.y = 5.3;
 			}
 		}
+
+		console.log(clockHeli.elapsedTime);
 
 		if (heli.position.y > 165 && turnHeli == 1) {
 			turnHeli = 0;
@@ -432,20 +494,15 @@ function animate() {
 	if (mixerHeli) {
 		mixerHeli.update(clockHeli.getDelta());
 	}
-	if (mixerDrone) {
-		mixerDrone.update(clockDrone.getDelta());
-	}
-	if (mixerPlane) {
-		mixerPlane.update(clockPlane.getDelta());
-	}
 
 	// console.log(cube.position.x)
 
 	//For FlyControls
-	controls1.update(0.05);
-	controls.update();
+	// controls1.update(0.05);
+	// controls.update();
 
 	requestAnimationFrame(animate);
+	update();
 
 	renderer.render(scene, camera);
 }
