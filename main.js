@@ -88,124 +88,6 @@ window.addEventListener("resize", () => {
 	renderer.render(scene, camera);
 });
 
-// Controls
-// let controls1 = new FlyControls(camera, renderer.domElement);
-// controls1.movementSpeed = 10;
-// controls1.rollSpeed = 0.05;
-// controls1.autoForward = false;
-// controls1.dragToLook = false;
-
-// let controls = new OrbitControls(camera, renderer.domElement);
-// controls.autoRotate = false;
-// controls.target = new THREE.Vector3(2, 2, 2);
-
-const pointerControls = new PointerLockControls(camera, renderer.domElement)
-document.addEventListener( 'click', function () {
-
-  pointerControls.lock();
-
-},false );
-scene.add(pointerControls.getObject());
-
-// Event listener for PointerLockControls change
-document.addEventListener('pointerlockchange', () => {
-  pointerControls.isLocked ? pointerControls.lock() : pointerControls.unlock();
-});
-
-// WASD key controls for movement
-const movement = {
-  forward: false,
-  backward: false,
-  left: false,
-  right: false
-};
-
-document.addEventListener('keydown', (event) => {
-  switch (event.code) {
-    case 'KeyW':
-      movement.forward = true;
-      break;
-    case 'KeyA':
-      movement.left = true;
-      break;
-    case 'KeyS':
-      movement.backward = true;
-      break;
-    case 'KeyD':
-      movement.right = true;
-      break;
-  }
-});
-
-document.addEventListener('keyup', (event) => {
-  switch (event.code) {
-    case 'KeyW':
-      movement.forward = false;
-      break;
-    case 'KeyA':
-      movement.left = false;
-      break;
-    case 'KeyS':
-      movement.backward = false;
-      break;
-    case 'KeyD':
-      movement.right = false;
-      break;
-  }
-});
-
-// Update camera position based on WASD movement
-function update() {
-
-  const speed = 0.1;
-
-  const forward = movement.forward ? 1 : 0;
-  const backward = movement.backward ? 1 : 0;
-  const left = movement.left ? 1 : 0;
-  const right = movement.right ? 1 : 0;
-
-  const direction = new THREE.Vector3(right - left, 0, backward - forward);
-  direction.normalize();
-
-  const moveVector = new THREE.Vector3(direction.x, 0, direction.z);
-  moveVector.applyQuaternion(camera.quaternion);
-  moveVector.multiplyScalar(speed);
-
-	// Check camera tembus bawah
-	if (camera.position.y < 5) {
-  	camera.position.y = 5; // Set camera position to ground level
-  }
-
-	// Check camera terbang
-	if (camera.position.y > 5) {
-  	camera.position.y = 5; // Set camera position to ground level
-  }
-
-	// console.log(parseInt(camera.position.x) + "," + parseInt(camera.position.y) + "," + parseInt(camera.position.z));
-
-	// Check camera mentok Utara
-	if (camera.position.z > 191) {
-  	camera.position.z = 191; // Set camera position to ground level
-  }
-
-	// Check camera mentok Barat
-	if (camera.position.x > 193) {
-  	camera.position.x = 193; // Set camera position to ground level
-  }
-
-	// Check camera mentok Timur
-	if (camera.position.x < -225) {
-  	camera.position.x = -225; // Set camera position to ground level
-  }
-
-	// Check camera mentok Utara
-	if (camera.position.z < -227) {
-  	camera.position.z = -227; // Set camera position to ground level
-  }
-
-  camera.position.add(moveVector);
-}
-
 // Models
 
 const loader = new GLTFLoader();
@@ -447,7 +329,187 @@ loader.load(
 	}
 );
 
+// Controls
 
+// let controls1 = new FlyControls(camera, renderer.domElement);
+// controls1.movementSpeed = 10;
+// controls1.rollSpeed = 0.05;
+// controls1.autoForward = false;
+// controls1.dragToLook = false;
+
+// let controls = new OrbitControls(camera, renderer.domElement);
+// controls.autoRotate = false;
+// controls.target = new THREE.Vector3(2, 2, 2);
+
+const pointerControls = new PointerLockControls(camera, renderer.domElement)
+document.addEventListener( 'click', function () {
+
+  pointerControls.lock();
+
+},false );
+scene.add(pointerControls.getObject());
+
+// Event listener for PointerLockControls change
+document.addEventListener('pointerlockchange', () => {
+  pointerControls.isLocked ? pointerControls.lock() : pointerControls.unlock();
+});
+
+// WASD key controls for movement
+const movement = {
+  forward: false,
+  backward: false,
+  left: false,
+  right: false
+};
+
+document.addEventListener('keydown', (event) => {
+  switch (event.code) {
+    case 'KeyW':
+      movement.forward = true;
+      break;
+    case 'KeyA':
+      movement.left = true;
+      break;
+    case 'KeyS':
+      movement.backward = true;
+      break;
+    case 'KeyD':
+      movement.right = true;
+      break;
+  }
+});
+
+document.addEventListener('keyup', (event) => {
+  switch (event.code) {
+    case 'KeyW':
+      movement.forward = false;
+      break;
+    case 'KeyA':
+      movement.left = false;
+      break;
+    case 'KeyS':
+      movement.backward = false;
+      break;
+    case 'KeyD':
+      movement.right = false;
+      break;
+  }
+});
+
+// Update camera position based on WASD movement
+function updateMove() {
+
+	const speed = 0.1;
+
+	let forward = movement.forward ? 1 : 0;
+	let backward = movement.backward ? 1 : 0;
+	let left = movement.left ? 1 : 0;
+	let right = movement.right ? 1 : 0;
+
+	let stop = false;
+
+	// console.log(forward + " " + backward + " " + right + " " + left);
+	// console.log(movement);
+
+	console.log();
+	// if (stop) {
+	// 	forward = 0;
+	// 	backward = 0;
+	// 	left = 0;
+	// 	right = 0;
+	// }
+
+
+	const direction = new THREE.Vector3(right - left, 0, backward - forward);
+	direction.normalize();
+
+	const moveVector = new THREE.Vector3(direction.x, 0, direction.z);
+	moveVector.applyQuaternion(camera.quaternion);
+	moveVector.multiplyScalar(speed);
+
+	// Check camera tembus bawah
+	if (camera.position.y < 5) {
+		camera.position.y = 5; // Set camera position to ground level
+	}
+
+	// Check camera terbang
+	if (camera.position.y > 5) {
+		camera.position.y = 5; // Set camera position to ground level
+	}
+
+	// console.log(parseInt(camera.position.x) + "," + parseInt(camera.position.y) + "," + parseInt(camera.position.z));
+
+	// Check camera mentok Utara
+	if (camera.position.z > 191) {
+		camera.position.z = 191; // Set camera position to ground level
+	}
+
+	// Check camera mentok Barat
+	if (camera.position.x > 193) {
+		camera.position.x = 193; // Set camera position to ground level
+	}
+
+	// Check camera mentok Timur
+	if (camera.position.x < -225) {
+		camera.position.x = -225; // Set camera position to ground level
+	}
+
+	// Check camera mentok Utara
+	if (camera.position.z < -227) {
+		camera.position.z = -227; // Set camera position to ground level
+	}
+
+	camera.position.add(moveVector);
+
+	if (
+		heli!=undefined &&
+		hot_air!=undefined &&
+		bus1!=undefined &&
+		bus2!=undefined &&
+		airport_building1!=undefined &&
+		airport_building2!=undefined &&
+		car_pack!=undefined
+	) {
+		let boundingBoxHeli = new THREE.Box3().setFromObject(heli);
+
+		let boundingBoxHotAir = new THREE.Box3().setFromObject(hot_air);
+		
+		let boundingBoxBus1 = new THREE.Box3().setFromObject(bus1);
+
+
+		let boundingBoxBus2 = new THREE.Box3().setFromObject(bus2);
+
+		let boundingBoxAirportBuilding1 = new THREE.Box3().setFromObject(airport_building1);
+		let boundingBoxAirportBuilding2 = new THREE.Box3().setFromObject(airport_building2);
+		let boundingBoxCarPack = new THREE.Box3().setFromObject(car_pack);
+	
+		if (boundingBoxHeli.containsPoint(camera.position)) {
+			console.log("kena heli");
+		}
+		if (boundingBoxHotAir.containsPoint(camera.position)) {
+			console.log("kena hot air");
+		}
+		if (boundingBoxBus1.containsPoint(camera.position)) {
+			console.log("kena bus1");
+		}
+		if (boundingBoxBus2.containsPoint(camera.position)) {
+			console.log("kena bus2");
+		}
+		
+		if (boundingBoxAirportBuilding1.containsPoint(camera.position)) {
+			console.log("kena building1");
+		}
+		// if (boundingBoxAirportBuilding2.containsPoint(camera.position)) {
+		// 	console.log("kena building2");
+		// 	cameraMove = false;
+		// }
+		if (boundingBoxCarPack.containsPoint(camera.position)) {
+			console.log("kena car");
+		}
+
+
+	}
+}
 
 let turnHeli = 1;
 let turnHotAir = 1;
@@ -517,7 +579,8 @@ function animate() {
 	requestAnimationFrame(animate);
 	
 	camera.rotation.y = pointerControls.getObject().rotation.y;
-	update();
+
+	updateMove();
 
 	renderer.render(scene, camera);
 }
