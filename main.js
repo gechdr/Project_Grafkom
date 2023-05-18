@@ -203,12 +203,12 @@ loader.load(
 	function (gltf) {
 		plane = gltf.scene;
 		// plane.castShadow = true;
-		plane.position.x = -15;
-		plane.position.y = 3;
-		plane.position.z = -20;
-		plane.scale.x = 3;
-		plane.scale.y = 3;
-		plane.scale.z = 3;
+		plane.position.x = -90;
+		plane.position.y = -25;
+		plane.position.z = -25;
+		plane.scale.x = 0.2;
+		plane.scale.y = 0.2;
+		plane.scale.z = 0.2;
 		plane.traverse( function( node ) { if ( node.isMesh) { node.castShadow = true; } } );
 		mixerPlane = new THREE.AnimationMixer(plane);
 		const clips = gltf.animations;
@@ -310,24 +310,24 @@ loader.load(
 	}
 );
 
-let bus2;
-loader.load(
-	// resource URL
-	"models/bus2.glb",
-	function (gltf) {
-		bus2 = gltf.scene;
-		// bus2.castShadow = true;
-		bus2.position.x = 10;
-		bus2.position.y = 1;
-		bus2.position.z = 120;
-		bus2.scale.x = 0.55;
-		bus2.scale.y = 0.55;
-		bus2.scale.z = 0.55;
-		bus2.rotation.y = 600;
-		bus2.traverse( function( node ) { if ( node.isMesh) { node.castShadow = true; } } );
-		scene.add(bus2);
-	}
-);
+// let bus2;
+// loader.load(
+// 	// resource URL
+// 	"models/bus2.glb",
+// 	function (gltf) {
+// 		bus2 = gltf.scene;
+// 		// bus2.castShadow = true;
+// 		bus2.position.x = 10;
+// 		bus2.position.y = 1;
+// 		bus2.position.z = 120;
+// 		bus2.scale.x = 0.55;
+// 		bus2.scale.y = 0.55;
+// 		bus2.scale.z = 0.55;
+// 		bus2.rotation.y = 600;
+// 		bus2.traverse( function( node ) { if ( node.isMesh) { node.castShadow = true; } } );
+// 		scene.add(bus2);
+// 	}
+// );
 
 // Controls
 
@@ -465,7 +465,6 @@ function updateMove() {
 		heli!=undefined &&
 		hot_air!=undefined &&
 		bus1!=undefined &&
-		bus2!=undefined &&
 		airport_building1!=undefined &&
 		airport_building2!=undefined &&
 		car_pack!=undefined
@@ -477,7 +476,7 @@ function updateMove() {
 		let boundingBoxBus1 = new THREE.Box3().setFromObject(bus1);
 
 
-		let boundingBoxBus2 = new THREE.Box3().setFromObject(bus2);
+		// let boundingBoxBus2 = new THREE.Box3().setFromObject(bus2);
 
 		let boundingBoxAirportBuilding1 = new THREE.Box3().setFromObject(airport_building1);
 		let boundingBoxAirportBuilding2 = new THREE.Box3().setFromObject(airport_building2);
@@ -513,11 +512,11 @@ function updateMove() {
 				camera.position.z = 23.5;
 			}
 		}
-		if (boundingBoxBus2.containsPoint(camera.position)) {
-			console.log("kena bus2");
-			console.log(camera.position);
+		// if (boundingBoxBus2.containsPoint(camera.position)) {
+		// 	console.log("kena bus2");
+		// 	console.log(camera.position);
 			
-		}
+		// }
 		
 		if (boundingBoxAirportBuilding1.containsPoint(camera.position)) {
 			console.log("kena building1");
@@ -546,8 +545,8 @@ function updateMove() {
 			}
 
 			// TOWER DEPAN
-			if(camera.position.x>=166 && camera.position.x<=167 && camera.position.z>=55 && camera.position.z<=76){
-				camera.position.x = 166.5;
+			if(camera.position.x>=165 && camera.position.x<=167 && camera.position.z>=55 && camera.position.z<=76){
+				camera.position.x = 165;
 			}
 
 			// TOWER KANAN
