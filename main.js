@@ -499,15 +499,42 @@ function updateMove() {
 	if (camera.position.x <= -52 && camera.position.x >= -63.5 && camera.position.z <= -7 && camera.position.z >= -7.5) {
 		camera.position.z = -7
 	}
-	// H
-	// I
-	// J
-	// K
-	// L
-	// M
-	// N
-	// O
-	// P
+	// H (-63,5,-28) (-63,5,-44) 
+	if (camera.position.x <= -63 && camera.position.x >= -63.5 && camera.position.z <= -28 && camera.position.z >= -44) {
+		camera.position.x = -63;
+	}
+	// I (-63,5,-44) (-75,5,-44)
+	if (camera.position.x <= -63 && camera.position.x >= -75.5 && camera.position.z >= -44 && camera.position.z <= -43.5) {
+		camera.position.z = -44;
+	}
+	// J (-63,5,8) (-63,5,-7)
+	if (camera.position.x <= -63 && camera.position.x >= -63.5 && camera.position.z <= 8 && camera.position.z >= -7) {
+		camera.position.x = -63;
+	}
+	// K (-63,5,8) (-75,5,8)
+	if (camera.position.x <= -63 && camera.position.x >= -75.5 && camera.position.z <= 8 && camera.position.z >= 7.5) {
+		camera.position.z = 8
+	}
+	// L (-75,5,-31) (-75,5,-44)
+	if (camera.position.x >= -75 && camera.position.x <= -74.5 && camera.position.z <= -31.5 && camera.position.z >= -44) {
+		camera.position.x = -75;
+	}
+	// M (-75,5,-32) (-87,5,-32)
+	if (camera.position.x <= -75 && camera.position.x >= -87.5 && camera.position.z >= -32 && camera.position.z <= -31.5) {
+		camera.position.z = -32;
+	}
+	// N (-75,5,8) (-75,5,-4)
+	if (camera.position.x >= -75 && camera.position.x <= -74.5 && camera.position.z <= 8 && camera.position.z >= -4.5) {
+		camera.position.x = -75;
+	}
+	// O (-75,5,-4) (-87,5,-4)
+	if (camera.position.x <= -75 && camera.position.x >= -87.5 && camera.position.z <= -4 && camera.position.z >= -4.5) {
+		camera.position.z = -4;
+	}
+	// P (-87,5,-4) (-87,5,-32)
+	if (camera.position.x >= -87 && camera.position.x <= -86.5 && camera.position.z <= -3.5 && camera.position.z >= -32) {
+		camera.position.x = -87;
+	}
 
 	// Building2
 	// BOX DEPAN
@@ -593,7 +620,7 @@ function updateMove() {
 		// }
 
 		if (boundingBoxPlane.containsPoint(camera.position)) {
-			console.log("kena plane");
+			// console.log("kena plane");
 		}
 		if (boundingBoxAirportBuilding1.containsPoint(camera.position)) {
 			console.log("kena building1");
