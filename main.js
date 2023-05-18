@@ -298,13 +298,13 @@ loader.load(
 	function (gltf) {
 		bus1 = gltf.scene;
 		// bus1.castShadow = true;
-		bus1.position.x = -40;
+		bus1.position.x = 10;
 		bus1.position.y = 1;
 		bus1.position.z = 150;
 		bus1.scale.x = 3;
 		bus1.scale.y = 3;
 		bus1.scale.z = 3;
-		bus1.rotation.y = 150;
+		// bus1.rotation.y = 150;
 		bus1.traverse( function( node ) { if ( node.isMesh) { node.castShadow = true; } } );
 		scene.add(bus1);
 	}
@@ -317,13 +317,13 @@ loader.load(
 	function (gltf) {
 		bus2 = gltf.scene;
 		// bus2.castShadow = true;
-		bus2.position.x = 70;
+		bus2.position.x = 10;
 		bus2.position.y = 1;
-		bus2.position.z = 52;
+		bus2.position.z = 120;
 		bus2.scale.x = 0.55;
 		bus2.scale.y = 0.55;
 		bus2.scale.z = 0.55;
-		bus2.rotation.y = -400;
+		bus2.rotation.y = 600;
 		bus2.traverse( function( node ) { if ( node.isMesh) { node.castShadow = true; } } );
 		scene.add(bus2);
 	}
@@ -491,18 +491,70 @@ function updateMove() {
 		}
 		if (boundingBoxBus1.containsPoint(camera.position)) {
 			console.log("kena bus1");
+			console.log(camera.position);
+
+			// BUS DEPAN
+			if(camera.position.x>=40 && camera.position.x<=41 && camera.position.z>=23 && camera.position.z<=32){
+				camera.position.x = 40.69;
+			}
+
+			// BUS KIRI
+			if(camera.position.x>=40 && camera.position.x<=73 && camera.position.z>=31 && camera.position.z<=33){
+				camera.position.z = 32.05;
+			}
+
+			// BUS BELAKANG
+			if(camera.position.x>=73 && camera.position.x<=74 && camera.position.z>=23 && camera.position.z<=33){
+				camera.position.x = 73.2696;
+			}
+
+			// BUS KANAN
+			if(camera.position.x>=40 && camera.position.x<=73 && camera.position.z>=23 && camera.position.z<=24){
+				camera.position.z = 23.5;
+			}
 		}
 		if (boundingBoxBus2.containsPoint(camera.position)) {
 			console.log("kena bus2");
+			console.log(camera.position);
+			
 		}
 		
 		if (boundingBoxAirportBuilding1.containsPoint(camera.position)) {
 			console.log("kena building1");
 		}
-		// if (boundingBoxAirportBuilding2.containsPoint(camera.position)) {
-		// 	console.log("kena building2");
-		// 	cameraMove = false;
-		// }
+		if (boundingBoxAirportBuilding2.containsPoint(camera.position)) {
+			console.log("kena building2");
+			console.log(camera.position);
+			// BOX DEPAN
+			if(camera.position.x>=137 && camera.position.x<=138 && camera.position.z>=7 && camera.position.z<=55){
+				camera.position.x = 137.60;
+			}
+
+			// BOX KIRI
+			if(camera.position.x>=138 && camera.position.x<=194 && camera.position.z>=7 && camera.position.z<=9){
+				camera.position.z = 8;
+			}
+
+			// // BOX BELAKANG
+			// if(camera.position.x>=73 && camera.position.x<=74 && camera.position.z>=23 && camera.position.z<=33){
+			// 	camera.position.x = 73.2696;
+			// }
+
+			// BOX KANAN
+			if(camera.position.x>=139 && camera.position.x<=166 && camera.position.z>=55 && camera.position.z<=56){
+				camera.position.z = 56;
+			}
+
+			// TOWER DEPAN
+			if(camera.position.x>=166 && camera.position.x<=167 && camera.position.z>=55 && camera.position.z<=76){
+				camera.position.x = 166.5;
+			}
+
+			// TOWER KANAN
+			if(camera.position.x>=167 && camera.position.x<=194 && camera.position.z>=76 && camera.position.z<=77){
+				camera.position.z = 76.5;
+			}
+		}
 		if (boundingBoxCarPack.containsPoint(camera.position)) {
 			console.log("kena car");
 		}
