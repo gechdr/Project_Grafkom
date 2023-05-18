@@ -459,6 +459,17 @@ function updateMove() {
 		camera.position.z = -227; // Set camera position to ground level
 	}
 
+	console.log(parseInt(camera.position.x) + " , " + parseInt(camera.position.y) + " , " + parseInt(camera.position.z));
+
+	// boxBuilding
+	// 23 , 5 , -58 kiri <-> 193 , 5 , -58 kanan <-> 23 , 5 , -227 atas
+	if (camera.position.z < -58 && camera.position.z >= -227 && camera.position.x >= 23 && camera.position.x <= 23.5) {
+		camera.position.x = 23;
+	}
+	if (camera.position.x >= 23.5 && camera.position.x <= 193 && camera.position.z <= -58) {
+		console.log("kena kanan");
+	}
+
 	camera.position.add(moveVector);
 
 	if (
