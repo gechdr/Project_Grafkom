@@ -205,7 +205,7 @@ loader.load(
 		// plane.castShadow = true;
 		plane.position.x = -90;
 		plane.position.y = -25;
-		plane.position.z = -25;
+		plane.position.z = -24.2;
 		plane.scale.x = 0.2;
 		plane.scale.y = 0.2;
 		plane.scale.z = 0.2;
@@ -461,7 +461,7 @@ function updateMove() {
 
 	console.log(parseInt(camera.position.x) + " , " + parseInt(camera.position.y) + " , " + parseInt(camera.position.z));
 
-	// boxBuilding
+	// Building1
 	// 23 , 5 , -58 kiri <-> 193 , 5 , -58 kanan <-> 23 , 5 , -227 atas
 	if (camera.position.z < -58 && camera.position.z >= -227 && camera.position.x >= 23 && camera.position.x <= 23.5) {
 		camera.position.x = 23;
@@ -470,12 +470,96 @@ function updateMove() {
 		console.log("kena kanan");
 	}
 
+	// Plane
+	// A (-35,5,-14) (-35,5,-21)
+	if (camera.position.x <= -35 && camera.position.x >= -35.5 && camera.position.z <= -14 && camera.position.z >= -21) {
+		camera.position.x = -35;
+	}
+	// B (-35,5,-21) (-52,5,-21)
+	if (camera.position.x <= -35 && camera.position.x >= -52.5 && camera.position.z >= -21 && camera.position.z <= -20.5) {
+		camera.position.z = -21
+	}
+	// C (-35,5,-14) (-52,5,-14)
+	if (camera.position.x <= -35 && camera.position.x >= -52.5 && camera.position.z <= -14 && camera.position.z >= -14.5) {
+		camera.position.z = -14
+	}
+	// D (-52,5,-20) (-52,5,-28)
+	if (camera.position.x <= -52 && camera.position.x >= -52.5 && camera.position.z <= -20 && camera.position.z >= -28) {
+		camera.position.x = -52;
+	}
+	// E (-52,5,-28) (-63,5,-28)
+	if (camera.position.x <= -52 && camera.position.x >= -63.5 && camera.position.z >= -28 && camera.position.z <= -27.5) {
+		camera.position.z = -28;
+	}
+	// F (-52,5,-7) (-52,5,-14)
+	if (camera.position.x <= -52 && camera.position.x >= -52.5 && camera.position.z <= -7 && camera.position.z >= -14) {
+		camera.position.x = -52;
+	}
+	// G (-52,5,-7) (-63,5,-7)
+	if (camera.position.x <= -52 && camera.position.x >= -63.5 && camera.position.z <= -7 && camera.position.z >= -7.5) {
+		camera.position.z = -7
+	}
+	// H
+	// I
+	// J
+	// K
+	// L
+	// M
+	// N
+	// O
+	// P
+
+	// Building2
+	// BOX DEPAN
+	if(camera.position.x>=137 && camera.position.x<=138 && camera.position.z>=7 && camera.position.z<=55){
+		camera.position.x = 137.60;
+	}
+	// BOX KIRI
+	if(camera.position.x>=138 && camera.position.x<=194 && camera.position.z>=7 && camera.position.z<=9){
+		camera.position.z = 8;
+	}
+	// // BOX BELAKANG
+	// if(camera.position.x>=73 && camera.position.x<=74 && camera.position.z>=23 && camera.position.z<=33){
+	// 	camera.position.x = 73.2696;
+	// }
+	// BOX KANAN
+	if(camera.position.x>=139 && camera.position.x<=166 && camera.position.z>=55 && camera.position.z<=56){
+		camera.position.z = 56;
+	}
+	// TOWER DEPAN
+	if(camera.position.x>=165 && camera.position.x<=167 && camera.position.z>=55 && camera.position.z<=76){
+		camera.position.x = 165;
+	}
+	// TOWER KANAN
+	if(camera.position.x>=167 && camera.position.x<=194 && camera.position.z>=76 && camera.position.z<=77){
+		camera.position.z = 76.5;
+	}
+
+	// Bus
+	// BUS DEPAN
+	if(camera.position.x>=40 && camera.position.x<=41 && camera.position.z>=23 && camera.position.z<=32){
+		camera.position.x = 40.69;
+	}
+	// BUS KIRI
+	if(camera.position.x>=40 && camera.position.x<=73 && camera.position.z>=31 && camera.position.z<=33){
+		camera.position.z = 32.05;
+	}
+	// BUS BELAKANG
+	if(camera.position.x>=73 && camera.position.x<=74 && camera.position.z>=23 && camera.position.z<=33){
+		camera.position.x = 73.2696;
+	}
+	// BUS KANAN
+	if(camera.position.x>=40 && camera.position.x<=73 && camera.position.z>=23 && camera.position.z<=24){
+		camera.position.z = 23.5;
+	}
+
 	camera.position.add(moveVector);
 
 	if (
 		heli!=undefined &&
 		hot_air!=undefined &&
 		bus1!=undefined &&
+		plane!=undefined &&
 		airport_building1!=undefined &&
 		airport_building2!=undefined &&
 		car_pack!=undefined
@@ -485,7 +569,8 @@ function updateMove() {
 		let boundingBoxHotAir = new THREE.Box3().setFromObject(hot_air);
 		
 		let boundingBoxBus1 = new THREE.Box3().setFromObject(bus1);
-
+		
+		let boundingBoxPlane = new THREE.Box3().setFromObject(plane);
 
 		// let boundingBoxBus2 = new THREE.Box3().setFromObject(bus2);
 
@@ -501,75 +586,24 @@ function updateMove() {
 		}
 		if (boundingBoxBus1.containsPoint(camera.position)) {
 			console.log("kena bus1");
-			console.log(camera.position);
-
-			// BUS DEPAN
-			if(camera.position.x>=40 && camera.position.x<=41 && camera.position.z>=23 && camera.position.z<=32){
-				camera.position.x = 40.69;
-			}
-
-			// BUS KIRI
-			if(camera.position.x>=40 && camera.position.x<=73 && camera.position.z>=31 && camera.position.z<=33){
-				camera.position.z = 32.05;
-			}
-
-			// BUS BELAKANG
-			if(camera.position.x>=73 && camera.position.x<=74 && camera.position.z>=23 && camera.position.z<=33){
-				camera.position.x = 73.2696;
-			}
-
-			// BUS KANAN
-			if(camera.position.x>=40 && camera.position.x<=73 && camera.position.z>=23 && camera.position.z<=24){
-				camera.position.z = 23.5;
-			}
 		}
 		// if (boundingBoxBus2.containsPoint(camera.position)) {
 		// 	console.log("kena bus2");
 		// 	console.log(camera.position);
-			
 		// }
-		
+
+		if (boundingBoxPlane.containsPoint(camera.position)) {
+			console.log("kena plane");
+		}
 		if (boundingBoxAirportBuilding1.containsPoint(camera.position)) {
 			console.log("kena building1");
 		}
 		if (boundingBoxAirportBuilding2.containsPoint(camera.position)) {
 			console.log("kena building2");
-			console.log(camera.position);
-			// BOX DEPAN
-			if(camera.position.x>=137 && camera.position.x<=138 && camera.position.z>=7 && camera.position.z<=55){
-				camera.position.x = 137.60;
-			}
-
-			// BOX KIRI
-			if(camera.position.x>=138 && camera.position.x<=194 && camera.position.z>=7 && camera.position.z<=9){
-				camera.position.z = 8;
-			}
-
-			// // BOX BELAKANG
-			// if(camera.position.x>=73 && camera.position.x<=74 && camera.position.z>=23 && camera.position.z<=33){
-			// 	camera.position.x = 73.2696;
-			// }
-
-			// BOX KANAN
-			if(camera.position.x>=139 && camera.position.x<=166 && camera.position.z>=55 && camera.position.z<=56){
-				camera.position.z = 56;
-			}
-
-			// TOWER DEPAN
-			if(camera.position.x>=165 && camera.position.x<=167 && camera.position.z>=55 && camera.position.z<=76){
-				camera.position.x = 165;
-			}
-
-			// TOWER KANAN
-			if(camera.position.x>=167 && camera.position.x<=194 && camera.position.z>=76 && camera.position.z<=77){
-				camera.position.z = 76.5;
-			}
 		}
 		if (boundingBoxCarPack.containsPoint(camera.position)) {
 			console.log("kena car");
 		}
-
-
 	}
 }
 
