@@ -611,6 +611,43 @@ function updateMove() {
 	// 	movement.forward = false;
 	// }
 
+	// Heli
+	if (heli != undefined) {
+		if (heli.position.y < 35) {
+			// DEPAN
+			if (camera.position.x >= -132.5 && camera.position.x <= -115 && camera.position.z >= -100.5 && camera.position.z <= -100) {
+				camera.position.z = -100;
+			}
+			// KANAN
+			if (camera.position.x >= -133 && camera.position.x <= -132.5 && camera.position.z >= -157 && camera.position.z <= -100) {
+				camera.position.x = -133;
+			}
+			// BELAKANG
+			if (camera.position.x >= -133 && camera.position.x <= -115 && camera.position.z >= -157 && camera.position.z <= -156.5) {
+				camera.position.z = -157;
+			}
+			// KIRI
+			if (camera.position.x >= -115.5 && camera.position.x <= -115 && camera.position.z >= -157 && camera.position.z <= -100.5) {
+				camera.position.x = -115;
+			}
+
+			if (heli.position.y > 15) {
+				let danger = false;
+				if (camera.position.x >= -133 && camera.position.x <= -115.5 && camera.position.z >= -157 && camera.position.z <= -100) {
+					console.log("danger");
+					camera.position.x = -90;
+					camera.position.y = 5;
+					camera.position.z = -90;
+				}
+			}
+		}
+	}
+	// DALAM
+	// -90 , 5 , -90
+	// if (condition) {
+		
+	// }
+
 	camera.position.add(moveVector);
 
 	if (heli != undefined && hot_air != undefined && bus1 != undefined && plane != undefined && airport_building1 != undefined && airport_building2 != undefined && car_pack != undefined) {
@@ -632,24 +669,7 @@ function updateMove() {
 			console.log("kena heli");
 			console.log(camera.position)
 			
-			// HELI DEPAN
-			if (camera.position.x >= -132.5 && camera.position.x <= -115 && camera.position.z >= -100.5 && camera.position.z <= -100) {
-				camera.position.z = -100;
-			}
-			// HELI KANAN
-			if (camera.position.x >= -133 && camera.position.x <= -132.5 && camera.position.z >= -157 && camera.position.z <= -100) {
-				camera.position.x = -133;
-			}
-			// HELI BELAKANG
-			if (camera.position.x >= -133 && camera.position.x <= -115 && camera.position.z >= -157 && camera.position.z <= -156.5) {
-				camera.position.z = -157;
-			}
-			// HELI KIRI
-			if (camera.position.x >= -115.5 && camera.position.x <= -115 && camera.position.z >= -157 && camera.position.z <= -100.5) {
-				camera.position.x = -115;
-			}
-
-			// DALAM
+			
 		}
 		if (boundingBoxHotAir.containsPoint(camera.position)) {
 			console.log("kena hot air");
