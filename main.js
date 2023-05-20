@@ -5,8 +5,8 @@ import { GLTFLoader } from "./GLTFLoader.js";
 import { EffectComposer } from "./EffectComposer.js";
 import { RenderPass } from "./RenderPass.js";
 import { UnrealBloomPass } from "./UnrealBloomPass.js";
-import { FirstPersonControls } from './FirstPersonControls.js';
-import { PointerLockControls } from './PointerLockControls.js';
+import { FirstPersonControls } from "./FirstPersonControls.js";
+import { PointerLockControls } from "./PointerLockControls.js";
 
 let width = window.innerWidth;
 let height = window.innerHeight;
@@ -20,7 +20,7 @@ const scene = new THREE.Scene();
 scene.background = texture;
 
 // Light
-const ambientLight = new THREE.AmbientLight(0xFFFFFFF);
+const ambientLight = new THREE.AmbientLight(0xfffffff);
 scene.add(ambientLight);
 
 // const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
@@ -53,14 +53,14 @@ const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 10000);
 // camera.lookAt(0, 0, 0);
 
 let player = {
-  height: 5,
-  turnSpeed: .1,
-  speed: .1,
-  jumpHeight: .3,
-  gravity: .01,
-  velocity: 0,
-  
-  playerJumps: false
+	height: 5,
+	turnSpeed: 0.1,
+	speed: 0.1,
+	jumpHeight: 0.3,
+	gravity: 0.01,
+	velocity: 0,
+
+	playerJumps: false,
 };
 
 camera.position.set(0, player.height, -5);
@@ -108,8 +108,10 @@ loader.load(
 		land.scale.z = 0.1;
 		// console.log(land);
 		land.traverse(function (node) {
-			if (node.isMesh) { node.receiveShadow = true; }
-		})
+			if (node.isMesh) {
+				node.receiveShadow = true;
+			}
+		});
 
 		scene.add(land);
 	}
@@ -128,7 +130,11 @@ loader.load(
 		airport_building1.scale.x = 1000;
 		airport_building1.scale.y = 1000;
 		airport_building1.scale.z = 1000;
-		airport_building1.traverse( function( node ) { if ( node.isMesh) { node.castShadow = true; } } );
+		airport_building1.traverse(function (node) {
+			if (node.isMesh) {
+				node.castShadow = true;
+			}
+		});
 		// console.log(plane);
 		scene.add(airport_building1);
 	}
@@ -148,7 +154,11 @@ loader.load(
 		airport_building2.scale.y = 0.04;
 		airport_building2.scale.z = 0.04;
 		airport_building2.rotation.y = -300;
-		airport_building2.traverse( function( node ) { if ( node.isMesh) { node.castShadow = true; } } );
+		airport_building2.traverse(function (node) {
+			if (node.isMesh) {
+				node.castShadow = true;
+			}
+		});
 		// console.log(plane);
 		scene.add(airport_building2);
 	}
@@ -193,7 +203,6 @@ loader.load(
 	}
 );
 
-
 // GANTI PESAWAT
 let mixerPlane;
 let plane;
@@ -209,7 +218,11 @@ loader.load(
 		plane.scale.x = 0.2;
 		plane.scale.y = 0.2;
 		plane.scale.z = 0.2;
-		plane.traverse( function( node ) { if ( node.isMesh) { node.castShadow = true; } } );
+		plane.traverse(function (node) {
+			if (node.isMesh) {
+				node.castShadow = true;
+			}
+		});
 		mixerPlane = new THREE.AnimationMixer(plane);
 		const clips = gltf.animations;
 		// console.log("plane");
@@ -238,7 +251,11 @@ loader.load(
 		heli.scale.x = 3;
 		heli.scale.y = 3;
 		heli.scale.z = 3;
-		heli.traverse( function( node ) { if ( node.isMesh) { node.castShadow = true; } } );
+		heli.traverse(function (node) {
+			if (node.isMesh) {
+				node.castShadow = true;
+			}
+		});
 		mixerHeli = new THREE.AnimationMixer(heli);
 		const clips = gltf.animations;
 		// console.log(clips);
@@ -266,7 +283,11 @@ loader.load(
 		hot_air.scale.y = 3;
 		hot_air.scale.z = 3;
 
-		hot_air.traverse( function( node ) { if ( node.isMesh) { node.castShadow = true; } } );
+		hot_air.traverse(function (node) {
+			if (node.isMesh) {
+				node.castShadow = true;
+			}
+		});
 		// hot_air.traverse( function( node ) { if ( node instanceof THREE.Mesh ) { node.castShadow = true; } } );
 		// console.log(hot_air);
 		scene.add(hot_air);
@@ -286,7 +307,11 @@ loader.load(
 		car_pack.scale.x = 3;
 		car_pack.scale.y = 3;
 		car_pack.scale.z = 3;
-		car_pack.traverse( function( node ) { if ( node.isMesh) { node.castShadow = true; } } );
+		car_pack.traverse(function (node) {
+			if (node.isMesh) {
+				node.castShadow = true;
+			}
+		});
 		scene.add(car_pack);
 	}
 );
@@ -305,7 +330,11 @@ loader.load(
 		bus1.scale.y = 3;
 		bus1.scale.z = 3;
 		// bus1.rotation.y = 150;
-		bus1.traverse( function( node ) { if ( node.isMesh) { node.castShadow = true; } } );
+		bus1.traverse(function (node) {
+			if (node.isMesh) {
+				node.castShadow = true;
+			}
+		});
 		scene.add(bus1);
 	}
 );
@@ -341,64 +370,65 @@ loader.load(
 // controls.autoRotate = false;
 // controls.target = new THREE.Vector3(2, 2, 2);
 
-const pointerControls = new PointerLockControls(camera, renderer.domElement)
-document.addEventListener( 'click', function () {
-
-  pointerControls.lock();
-
-},false );
+const pointerControls = new PointerLockControls(camera, renderer.domElement);
+document.addEventListener(
+	"click",
+	function () {
+		pointerControls.lock();
+	},
+	false
+);
 scene.add(pointerControls.getObject());
 
 // Event listener for PointerLockControls change
-document.addEventListener('pointerlockchange', () => {
-  pointerControls.isLocked ? pointerControls.lock() : pointerControls.unlock();
+document.addEventListener("pointerlockchange", () => {
+	pointerControls.isLocked ? pointerControls.lock() : pointerControls.unlock();
 });
 
 // WASD key controls for movement
 const movement = {
-  forward: false,
-  backward: false,
-  left: false,
-  right: false
+	forward: false,
+	backward: false,
+	left: false,
+	right: false,
 };
 
-document.addEventListener('keydown', (event) => {
-  switch (event.code) {
-    case 'KeyW':
-      movement.forward = true;
-      break;
-    case 'KeyA':
-      movement.left = true;
-      break;
-    case 'KeyS':
-      movement.backward = true;
-      break;
-    case 'KeyD':
-      movement.right = true;
-      break;
-  }
+document.addEventListener("keydown", (event) => {
+	switch (event.code) {
+		case "KeyW":
+			movement.forward = true;
+			break;
+		case "KeyA":
+			movement.left = true;
+			break;
+		case "KeyS":
+			movement.backward = true;
+			break;
+		case "KeyD":
+			movement.right = true;
+			break;
+	}
 });
 
-document.addEventListener('keyup', (event) => {
-  switch (event.code) {
-    case 'KeyW':
-      movement.forward = false;
-      break;
-    case 'KeyA':
-      movement.left = false;
-      break;
-    case 'KeyS':
-      movement.backward = false;
-      break;
-    case 'KeyD':
-      movement.right = false;
-      break;
-  }
+document.addEventListener("keyup", (event) => {
+	switch (event.code) {
+		case "KeyW":
+			movement.forward = false;
+			break;
+		case "KeyA":
+			movement.left = false;
+			break;
+		case "KeyS":
+			movement.backward = false;
+			break;
+		case "KeyD":
+			movement.right = false;
+			break;
+	}
 });
 
 // Update camera position based on WASD movement
 function updateMove() {
-
 	const speed = 0.1;
 
 	let forward = movement.forward ? 1 : 0;
@@ -418,7 +448,6 @@ function updateMove() {
 	// 	left = 0;
 	// 	right = 0;
 	// }
-
 
 	const direction = new THREE.Vector3(right - left, 0, backward - forward);
 	direction.normalize();
@@ -467,7 +496,7 @@ function updateMove() {
 		camera.position.x = 23;
 	}
 	if (camera.position.x >= 23.5 && camera.position.x <= 193 && camera.position.z <= -58) {
-		console.log("kena kanan");
+		camera.position.z = -58;
 	}
 
 	// Plane
@@ -477,11 +506,11 @@ function updateMove() {
 	}
 	// B (-35,5,-21) (-52,5,-21)
 	if (camera.position.x <= -35 && camera.position.x >= -52.5 && camera.position.z >= -21 && camera.position.z <= -20.5) {
-		camera.position.z = -21
+		camera.position.z = -21;
 	}
 	// C (-35,5,-14) (-52,5,-14)
 	if (camera.position.x <= -35 && camera.position.x >= -52.5 && camera.position.z <= -14 && camera.position.z >= -14.5) {
-		camera.position.z = -14
+		camera.position.z = -14;
 	}
 	// D (-52,5,-20) (-52,5,-28)
 	if (camera.position.x <= -52 && camera.position.x >= -52.5 && camera.position.z <= -20 && camera.position.z >= -28) {
@@ -497,9 +526,9 @@ function updateMove() {
 	}
 	// G (-52,5,-7) (-63,5,-7)
 	if (camera.position.x <= -52 && camera.position.x >= -63.5 && camera.position.z <= -7 && camera.position.z >= -7.5) {
-		camera.position.z = -7
+		camera.position.z = -7;
 	}
-	// H (-63,5,-28) (-63,5,-44) 
+	// H (-63,5,-28) (-63,5,-44)
 	if (camera.position.x <= -63 && camera.position.x >= -63.5 && camera.position.z <= -28 && camera.position.z >= -44) {
 		camera.position.x = -63;
 	}
@@ -513,7 +542,7 @@ function updateMove() {
 	}
 	// K (-63,5,8) (-75,5,8)
 	if (camera.position.x <= -63 && camera.position.x >= -75.5 && camera.position.z <= 8 && camera.position.z >= 7.5) {
-		camera.position.z = 8
+		camera.position.z = 8;
 	}
 	// L (-75,5,-31) (-75,5,-44)
 	if (camera.position.x >= -75 && camera.position.x <= -74.5 && camera.position.z <= -31.5 && camera.position.z >= -44) {
@@ -538,11 +567,11 @@ function updateMove() {
 
 	// Building2
 	// BOX DEPAN
-	if(camera.position.x>=137 && camera.position.x<=138 && camera.position.z>=7 && camera.position.z<=55){
-		camera.position.x = 137.60;
+	if (camera.position.x >= 137 && camera.position.x <= 138 && camera.position.z >= 7 && camera.position.z <= 55) {
+		camera.position.x = 137.6;
 	}
 	// BOX KIRI
-	if(camera.position.x>=138 && camera.position.x<=194 && camera.position.z>=7 && camera.position.z<=9){
+	if (camera.position.x >= 138 && camera.position.x <= 194 && camera.position.z >= 7 && camera.position.z <= 9) {
 		camera.position.z = 8;
 	}
 	// // BOX BELAKANG
@@ -550,53 +579,45 @@ function updateMove() {
 	// 	camera.position.x = 73.2696;
 	// }
 	// BOX KANAN
-	if(camera.position.x>=139 && camera.position.x<=166 && camera.position.z>=55 && camera.position.z<=56){
+	if (camera.position.x >= 139 && camera.position.x <= 166 && camera.position.z >= 55 && camera.position.z <= 56) {
 		camera.position.z = 56;
 	}
 	// TOWER DEPAN
-	if(camera.position.x>=165 && camera.position.x<=167 && camera.position.z>=55 && camera.position.z<=76){
+	if (camera.position.x >= 165 && camera.position.x <= 167 && camera.position.z >= 55 && camera.position.z <= 76) {
 		camera.position.x = 165;
 	}
 	// TOWER KANAN
-	if(camera.position.x>=167 && camera.position.x<=194 && camera.position.z>=76 && camera.position.z<=77){
+	if (camera.position.x >= 167 && camera.position.x <= 194 && camera.position.z >= 76 && camera.position.z <= 77) {
 		camera.position.z = 76.5;
 	}
 
 	// Bus
 	// BUS DEPAN
-	if(camera.position.x>=40 && camera.position.x<=41 && camera.position.z>=23 && camera.position.z<=32){
+	if (camera.position.x >= 40 && camera.position.x <= 41 && camera.position.z >= 23 && camera.position.z <= 32) {
 		camera.position.x = 40.69;
 	}
 	// BUS KIRI
-	if(camera.position.x>=40 && camera.position.x<=73 && camera.position.z>=31 && camera.position.z<=33){
+	if (camera.position.x >= 40 && camera.position.x <= 73 && camera.position.z >= 31 && camera.position.z <= 33) {
 		camera.position.z = 32.05;
 	}
 	// BUS BELAKANG
-	if(camera.position.x>=73 && camera.position.x<=74 && camera.position.z>=23 && camera.position.z<=33){
+	if (camera.position.x >= 73 && camera.position.x <= 74 && camera.position.z >= 23 && camera.position.z <= 33) {
 		camera.position.x = 73.2696;
 	}
 	// BUS KANAN
-	if(camera.position.x>=40 && camera.position.x<=73 && camera.position.z>=23 && camera.position.z<=24){
+	if (camera.position.x >= 40 && camera.position.x <= 73 && camera.position.z >= 23 && camera.position.z <= 24) {
 		camera.position.z = 23.5;
 	}
 
 	camera.position.add(moveVector);
 
-	if (
-		heli!=undefined &&
-		hot_air!=undefined &&
-		bus1!=undefined &&
-		plane!=undefined &&
-		airport_building1!=undefined &&
-		airport_building2!=undefined &&
-		car_pack!=undefined
-	) {
+	if (heli != undefined && hot_air != undefined && bus1 != undefined && plane != undefined && airport_building1 != undefined && airport_building2 != undefined && car_pack != undefined) {
 		let boundingBoxHeli = new THREE.Box3().setFromObject(heli);
 
 		let boundingBoxHotAir = new THREE.Box3().setFromObject(hot_air);
-		
+
 		let boundingBoxBus1 = new THREE.Box3().setFromObject(bus1);
-		
+
 		let boundingBoxPlane = new THREE.Box3().setFromObject(plane);
 
 		// let boundingBoxBus2 = new THREE.Box3().setFromObject(bus2);
@@ -604,7 +625,7 @@ function updateMove() {
 		let boundingBoxAirportBuilding1 = new THREE.Box3().setFromObject(airport_building1);
 		let boundingBoxAirportBuilding2 = new THREE.Box3().setFromObject(airport_building2);
 		let boundingBoxCarPack = new THREE.Box3().setFromObject(car_pack);
-	
+
 		if (boundingBoxHeli.containsPoint(camera.position)) {
 			console.log("kena heli");
 		}
@@ -700,7 +721,7 @@ function animate() {
 	// controls.update();
 
 	requestAnimationFrame(animate);
-	
+
 	camera.rotation.y = pointerControls.getObject().rotation.y;
 
 	updateMove();
