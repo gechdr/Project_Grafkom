@@ -488,7 +488,7 @@ function updateMove() {
 		camera.position.z = -227; // Set camera position to ground level
 	}
 
-	console.log(parseInt(camera.position.x) + " , " + parseInt(camera.position.y) + " , " + parseInt(camera.position.z));
+	// console.log(parseInt(camera.position.x) + " , " + parseInt(camera.position.y) + " , " + parseInt(camera.position.z));
 
 	// Building1
 	// 23 , 5 , -58 kiri <-> 193 , 5 , -58 kanan <-> 23 , 5 , -227 atas
@@ -574,10 +574,6 @@ function updateMove() {
 	if (camera.position.x >= 138 && camera.position.x <= 194 && camera.position.z >= 7 && camera.position.z <= 9) {
 		camera.position.z = 8;
 	}
-	// // BOX BELAKANG
-	// if(camera.position.x>=73 && camera.position.x<=74 && camera.position.z>=23 && camera.position.z<=33){
-	// 	camera.position.x = 73.2696;
-	// }
 	// BOX KANAN
 	if (camera.position.x >= 139 && camera.position.x <= 166 && camera.position.z >= 55 && camera.position.z <= 56) {
 		camera.position.z = 56;
@@ -598,16 +594,22 @@ function updateMove() {
 	}
 	// BUS KIRI
 	if (camera.position.x >= 40 && camera.position.x <= 73 && camera.position.z >= 31 && camera.position.z <= 33) {
-		camera.position.z = 32.05;
+		camera.position.z = 32.5;
 	}
 	// BUS BELAKANG
 	if (camera.position.x >= 73 && camera.position.x <= 74 && camera.position.z >= 23 && camera.position.z <= 33) {
 		camera.position.x = 73.2696;
 	}
 	// BUS KANAN
-	if (camera.position.x >= 40 && camera.position.x <= 73 && camera.position.z >= 23 && camera.position.z <= 24) {
+	if (camera.position.x >= 41 && camera.position.x <= 73 && camera.position.z >= 23 && camera.position.z <= 24) {
 		camera.position.z = 23.5;
 	}
+
+	// MOBIL
+	// if((camera.position.x < car_pack.position.x + 5) && (camera.position.x > car_pack.position.x - 5) && (camera.position.z < car_pack.position.z -5) && (camera.position.z > car_pack.position.z -5)) {
+	// 	console.log("masok")
+	// 	movement.forward = false;
+	// }
 
 	camera.position.add(moveVector);
 
@@ -628,6 +630,26 @@ function updateMove() {
 
 		if (boundingBoxHeli.containsPoint(camera.position)) {
 			console.log("kena heli");
+			console.log(camera.position)
+			
+			// HELI DEPAN
+			if (camera.position.x >= -132.5 && camera.position.x <= -115 && camera.position.z >= -100.5 && camera.position.z <= -100) {
+				camera.position.z = -100;
+			}
+			// HELI KANAN
+			if (camera.position.x >= -133 && camera.position.x <= -132.5 && camera.position.z >= -157 && camera.position.z <= -100) {
+				camera.position.x = -133;
+			}
+			// HELI BELAKANG
+			if (camera.position.x >= -133 && camera.position.x <= -115 && camera.position.z >= -157 && camera.position.z <= -156.5) {
+				camera.position.z = -157;
+			}
+			// HELI KIRI
+			if (camera.position.x >= -115.5 && camera.position.x <= -115 && camera.position.z >= -157 && camera.position.z <= -100.5) {
+				camera.position.x = -115;
+			}
+
+			// DALAM
 		}
 		if (boundingBoxHotAir.containsPoint(camera.position)) {
 			console.log("kena hot air");
@@ -651,6 +673,24 @@ function updateMove() {
 		}
 		if (boundingBoxCarPack.containsPoint(camera.position)) {
 			console.log("kena car");
+			// console.log(camera.position)
+			movement.forward = false;
+			movement.left = false;
+			movement.backward = false;
+			movement.right = false;
+			
+			if(camera.position.x < car_pack.position.x){
+				camera.position.x = camera.position.x - 0.05;
+			}
+			if(camera.position.x>car_pack.position.x){
+				camera.position.x = camera.position.x + 0.05;
+			}
+			if(camera.position.z<car_pack.position.z){
+				camera.position.z = camera.position.z - 0.05;
+			}
+			if(camera.position.z>car_pack.position.z){
+				camera.position.z = camera.position.z + 0.05;
+			}
 		}
 	}
 }
