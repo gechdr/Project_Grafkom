@@ -535,20 +535,20 @@ function updateMove() {
 
 	// Bus
 	// BUS DEPAN
-	if (camera.position.x >= 40 && camera.position.x <= 41 && camera.position.z >= 23 && camera.position.z <= 32) {
-		camera.position.x = 40.69;
+	if (camera.position.x >= 40 && camera.position.x <= 40.5 && camera.position.z >= 23 && camera.position.z <= 32) {
+		camera.position.x = 40;
 	}
 	// BUS KIRI
-	if (camera.position.x >= 40 && camera.position.x <= 73 && camera.position.z >= 31 && camera.position.z <= 33) {
+	if (camera.position.x >= 40 && camera.position.x <= 73 && camera.position.z >= 32 && camera.position.z <= 32.5) {
 		camera.position.z = 32.5;
 	}
 	// BUS BELAKANG
-	if (camera.position.x >= 73 && camera.position.x <= 74 && camera.position.z >= 23 && camera.position.z <= 33) {
-		camera.position.x = 73.2696;
+	if (camera.position.x >= 73 && camera.position.x <= 73.5 && camera.position.z >= 23 && camera.position.z <= 32) {
+		camera.position.x = 73.5;
 	}
 	// BUS KANAN
-	if (camera.position.x >= 41 && camera.position.x <= 73 && camera.position.z >= 23 && camera.position.z <= 24) {
-		camera.position.z = 23.5;
+	if (camera.position.x >= 40 && camera.position.x <= 73 && camera.position.z >= 23 && camera.position.z <= 23.5) {
+		camera.position.z = 23;
 	}
 
 	// Heli
