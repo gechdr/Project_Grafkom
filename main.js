@@ -520,12 +520,12 @@ function updateMove() {
 		camera.position.z = 7;
 	}
 	// BOX KANAN
-	if (camera.position.x >= 137 && camera.position.x <= 166 && camera.position.z >= 55 && camera.position.z <= 55.5) {
+	if (camera.position.x >= 137 && camera.position.x <= 168 && camera.position.z >= 55 && camera.position.z <= 55.5) {
 		camera.position.z = 55.5;
 	}
 	// TOWER DEPAN
-	if (camera.position.x >= 166 && camera.position.x <= 166.5 && camera.position.z >= 55 && camera.position.z <= 76) {
-		camera.position.x = 166;
+	if (camera.position.x >= 167 && camera.position.x <= 167.5 && camera.position.z >= 55 && camera.position.z <= 76) {
+		camera.position.x = 167;
 	}
 	// TOWER KANAN
 	if (camera.position.x >= 166 && camera.position.x <= 194 && camera.position.z >= 76 && camera.position.z <= 76.5) {
