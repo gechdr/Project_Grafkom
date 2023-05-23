@@ -314,7 +314,6 @@ loader.load(
 	}
 );
 
-
 // Controls
 
 // let controls1 = new FlyControls(camera, renderer.domElement);
@@ -550,7 +549,7 @@ function updateMove() {
 	if (camera.position.x >= 40 && camera.position.x <= 73 && camera.position.z >= 23 && camera.position.z <= 23.5) {
 		camera.position.z = 23;
 	}
-
+	//
 	// Heli
 	if (heli != undefined) {
 		if (heli.position.y < 35) {
@@ -602,9 +601,7 @@ function updateMove() {
 
 		if (boundingBoxHeli.containsPoint(camera.position)) {
 			console.log("kena heli");
-			console.log(camera.position)
-			
-			
+			console.log(camera.position);
 		}
 		if (boundingBoxHotAir.containsPoint(camera.position)) {
 			console.log("kena hot air");
@@ -628,17 +625,17 @@ function updateMove() {
 			movement.left = false;
 			movement.backward = false;
 			movement.right = false;
-			
-			if(camera.position.x < car_pack.position.x){
+
+			if (camera.position.x < car_pack.position.x) {
 				camera.position.x = camera.position.x - 0.05;
 			}
-			if(camera.position.x>car_pack.position.x){
+			if (camera.position.x > car_pack.position.x) {
 				camera.position.x = camera.position.x + 0.05;
 			}
-			if(camera.position.z<car_pack.position.z){
+			if (camera.position.z < car_pack.position.z) {
 				camera.position.z = camera.position.z - 0.05;
 			}
-			if(camera.position.z>car_pack.position.z){
+			if (camera.position.z > car_pack.position.z) {
 				camera.position.z = camera.position.z + 0.05;
 			}
 		}
