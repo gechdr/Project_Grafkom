@@ -1,7 +1,0 @@
-Proyek Grafkom
-
-Kurang: 
-- Kamera Collision
-- Limit Map
-- Bikin FirstPerson kayak game
-- Fix Bug

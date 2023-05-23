@@ -1,11 +1,5 @@
 import * as THREE from "three";
-import { OrbitControls } from "https://threejs.org/examples/jsm/controls/OrbitControls.js";
-import { FlyControls } from "./FlyControls.js";
 import { GLTFLoader } from "./GLTFLoader.js";
-import { EffectComposer } from "./EffectComposer.js";
-import { RenderPass } from "./RenderPass.js";
-import { UnrealBloomPass } from "./UnrealBloomPass.js";
-import { FirstPersonControls } from "./FirstPersonControls.js";
 import { PointerLockControls } from "./PointerLockControls.js";
 
 let width = window.innerWidth;
@@ -164,25 +158,6 @@ loader.load(
 	}
 );
 
-// loader.load(
-// 	// resource URL
-// 	"models/airport_building2.glb",
-// 	function (gltf) {
-// 		airport_building2 = gltf.scene;
-// 		// airport_building2.castShadow = true;
-// 		airport_building2.position.x = 130;
-// 		airport_building2.position.y = 0;
-// 		airport_building2.position.z = 135;
-// 		airport_building2.scale.x = 0.04;
-// 		airport_building2.scale.y = 0.04;
-// 		airport_building2.scale.z = 0.04;
-// 		airport_building2.rotation.y = -300;
-// 		airport_building2.traverse( function( node ) { if ( node.isMesh) { node.castShadow = true; } } );
-// 		// console.log(plane);
-// 		scene.add(airport_building2);
-// 	}
-// );
-
 let helipad;
 loader.load(
 	// resource URL
@@ -339,24 +314,6 @@ loader.load(
 	}
 );
 
-// let bus2;
-// loader.load(
-// 	// resource URL
-// 	"models/bus2.glb",
-// 	function (gltf) {
-// 		bus2 = gltf.scene;
-// 		// bus2.castShadow = true;
-// 		bus2.position.x = 10;
-// 		bus2.position.y = 1;
-// 		bus2.position.z = 120;
-// 		bus2.scale.x = 0.55;
-// 		bus2.scale.y = 0.55;
-// 		bus2.scale.z = 0.55;
-// 		bus2.rotation.y = 600;
-// 		bus2.traverse( function( node ) { if ( node.isMesh) { node.castShadow = true; } } );
-// 		scene.add(bus2);
-// 	}
-// );
 
 // Controls
 
@@ -437,17 +394,6 @@ function updateMove() {
 	let right = movement.right ? 1 : 0;
 
 	let stop = false;
-
-	// console.log(forward + " " + backward + " " + right + " " + left);
-	// console.log(movement);
-
-	console.log();
-	// if (stop) {
-	// 	forward = 0;
-	// 	backward = 0;
-	// 	left = 0;
-	// 	right = 0;
-	// }
 
 	const direction = new THREE.Vector3(right - left, 0, backward - forward);
 	direction.normalize();
@@ -605,12 +551,6 @@ function updateMove() {
 		camera.position.z = 23.5;
 	}
 
-	// MOBIL
-	// if((camera.position.x < car_pack.position.x + 5) && (camera.position.x > car_pack.position.x - 5) && (camera.position.z < car_pack.position.z -5) && (camera.position.z > car_pack.position.z -5)) {
-	// 	console.log("masok")
-	// 	movement.forward = false;
-	// }
-
 	// Heli
 	if (heli != undefined) {
 		if (heli.position.y < 35) {
@@ -642,11 +582,6 @@ function updateMove() {
 			}
 		}
 	}
-	// DALAM
-	// -90 , 5 , -90
-	// if (condition) {
-		
-	// }
 
 	camera.position.add(moveVector);
 
@@ -677,11 +612,6 @@ function updateMove() {
 		if (boundingBoxBus1.containsPoint(camera.position)) {
 			console.log("kena bus1");
 		}
-		// if (boundingBoxBus2.containsPoint(camera.position)) {
-		// 	console.log("kena bus2");
-		// 	console.log(camera.position);
-		// }
-
 		if (boundingBoxPlane.containsPoint(camera.position)) {
 			// console.log("kena plane");
 		}
