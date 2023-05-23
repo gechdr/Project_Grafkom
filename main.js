@@ -513,23 +513,23 @@ function updateMove() {
 
 	// Building2
 	// BOX DEPAN
-	if (camera.position.x >= 137 && camera.position.x <= 138 && camera.position.z >= 7 && camera.position.z <= 55) {
-		camera.position.x = 137.6;
+	if (camera.position.x >= 137 && camera.position.x <= 137.5 && camera.position.z >= 7 && camera.position.z <= 55) {
+		camera.position.x = 137;
 	}
 	// BOX KIRI
-	if (camera.position.x >= 138 && camera.position.x <= 194 && camera.position.z >= 7 && camera.position.z <= 9) {
-		camera.position.z = 8;
+	if (camera.position.x >= 137 && camera.position.x <= 194 && camera.position.z >= 7 && camera.position.z <= 7.5) {
+		camera.position.z = 7;
 	}
 	// BOX KANAN
-	if (camera.position.x >= 139 && camera.position.x <= 166 && camera.position.z >= 55 && camera.position.z <= 56) {
-		camera.position.z = 56;
+	if (camera.position.x >= 137 && camera.position.x <= 166 && camera.position.z >= 55 && camera.position.z <= 55.5) {
+		camera.position.z = 55.5;
 	}
 	// TOWER DEPAN
-	if (camera.position.x >= 165 && camera.position.x <= 167 && camera.position.z >= 55 && camera.position.z <= 76) {
-		camera.position.x = 165;
+	if (camera.position.x >= 166 && camera.position.x <= 166.5 && camera.position.z >= 55 && camera.position.z <= 76) {
+		camera.position.x = 166;
 	}
 	// TOWER KANAN
-	if (camera.position.x >= 167 && camera.position.x <= 194 && camera.position.z >= 76 && camera.position.z <= 77) {
+	if (camera.position.x >= 166 && camera.position.x <= 194 && camera.position.z >= 76 && camera.position.z <= 76.5) {
 		camera.position.z = 76.5;
 	}
 
